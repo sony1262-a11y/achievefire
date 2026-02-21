@@ -21,7 +21,7 @@
   --gr:#34d399;--gr-bg:#e6f9f2;
   --nav-h:62px;
   --sb:env(safe-area-inset-bottom,0px);
-  --st:env(safe-area-inset-top,50px);
+  --st:env(safe-area-inset-top,0px);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
@@ -33,7 +33,7 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
 
 /* HEADER */
 .hdr{background:linear-gradient(155deg,var(--sage-dk),var(--sage));
-  padding:calc(var(--st)+10px) 16px 14px;flex-shrink:0;position:relative;overflow:hidden;z-index:10}
+  padding:calc(var(--st)+12px) 16px 14px;flex-shrink:0;position:relative;overflow:hidden;z-index:10}
 .hdr::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;
   background:rgba(255,255,255,.06);border-radius:50%}
 .hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;position:relative;z-index:1}
@@ -2034,6 +2034,41 @@ document.getElementById('task-nm').addEventListener('keydown',e=>{if(e.key==='En
 //  INIT
 // ══════════════════════════════════════
 renderHome();
+
+// ══════════════════════════════════════
+//  SAFE AREA — dynamic detection for PWA / GitHub Pages
+// ══════════════════════════════════════
+(function applySafeArea(){
+  // Read env() values via computed style on a test element
+  const probe = document.createElement('div');
+  probe.style.cssText = [
+    'position:fixed','top:0','left:0','width:1px','height:1px',
+    'padding-top:env(safe-area-inset-top,0px)',
+    'padding-bottom:env(safe-area-inset-bottom,0px)',
+    'pointer-events:none','opacity:0','visibility:hidden'
+  ].join(';');
+  document.body.appendChild(probe);
+  const cs = getComputedStyle(probe);
+  let top = parseInt(cs.paddingTop) || 0;
+  let bot = parseInt(cs.paddingBottom) || 0;
+  document.body.removeChild(probe);
+
+  // iPhone with notch/Dynamic Island: status bar is 47-59px
+  // If env() returned 0 (can happen in some PWA contexts), detect by screen size
+  if (top === 0) {
+    const h = window.screen.height;
+    const w = window.screen.width;
+    const ratio = h / w;
+    // Tall iPhones (X and newer) have ratio > 2.1
+    if (ratio > 2.1) top = 47;
+    else top = 20; // older iPhones
+  }
+  if (bot === 0 && top > 20) bot = 34; // home indicator on notch iPhones
+
+  // Apply as CSS custom properties
+  document.documentElement.style.setProperty('--st', top + 'px');
+  document.documentElement.style.setProperty('--sb', bot + 'px');
+})();
 
 // ── Quick Launch: 網址加 ?add 直接開記帳畫面 ──
 (function(){
