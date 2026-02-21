@@ -9,7 +9,7 @@
 // 6. 長按 Widget → Edit → 選這個腳本
 // ==========================================
 
-const APP_URL = "https://你的帳號.github.io/fire-tracker/?widget=1"
+const APP_URL = "https://sony1262-a11y.github.io/achievefire/?widget=1"
 // ↑↑↑ 換成你的網址，後面記得加 ?widget=1
 
 // ── Fetch data ──
