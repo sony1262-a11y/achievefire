@@ -61,9 +61,10 @@ background:rgba(255,255,255,.06);border-radius:50%}
 color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer}
 .hdr-ico{width:32px;height:32px;background:rgba(255,255,255,.18);border:none;border-radius:50%;
 color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-/* FAB — fixed bottom right, always visible, never blocks content */
-.fab-wrap{position:fixed;bottom:calc(var(–nav-h) + 16px + env(safe-area-inset-bottom,34px));
-right:16px;pointer-events:none;z-index:200;height:52px;display:flex;align-items:center}
+/* FAB — sticky inside scroll, always floats at bottom-right */
+.fab-wrap{position:sticky;bottom:16px;
+display:flex;justify-content:flex-end;padding-right:16px;
+pointer-events:none;z-index:50;margin-top:-56px;height:56px}
 .fab{pointer-events:auto;background:var(–sage-dk);color:#fff;border:none;border-radius:28px;
 height:52px;padding:0 22px;font-size:15px;font-weight:700;font-family:inherit;
 cursor:pointer;display:flex;align-items:center;gap:5px;
@@ -175,7 +176,7 @@ width:0;overflow:hidden;cursor:pointer;font-size:12px;font-weight:700;transition
 display:flex;align-items:center;justify-content:center}
 .exp-it.sw .del-btn{width:60px}
 .empty-st{text-align:center;padding:32px 20px;color:var(–tx3)}
-.bot-sp{height:calc(var(–nav-h)+20px+var(–sb))}
+.bot-sp{height:calc(var(–nav-h) + 72px + var(–sb))}
 
 /* SEC HDR */
 .sec-h{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 6px}
@@ -527,14 +528,13 @@ outline:none;width:130px;text-align:right;font-family:inherit}
   <button class="btn-tx" onclick="showPage('pg-analysis')">分析 →</button>
 </div>
 <div class="exp-sec" id="exp-container"></div>
+<div class="fab-wrap">
+  <button class="fab" onclick="openAddExp()">＋ 記一筆</button>
+</div>
 <div class="bot-sp"></div>
 ```
 
   </div>
-</div>
-<!-- FAB — fixed, outside scroll -->
-<div class="fab-wrap">
-  <button class="fab" onclick="openAddExp()">＋ 記一筆</button>
 </div>
 
 <!-- ══ TODO PAGE ══ -->
