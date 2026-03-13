@@ -225,8 +225,8 @@ box-shadow:0 1px 5px rgba(0,0,0,.05);overflow:hidden}
 .ck-it:last-child{border-bottom:none}
 .ck-box{width:22px;height:22px;border-radius:7px;border:2px solid #b0c8b8;
 display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;background:#fff}
-.ck-box.mn{background:var(–sage-dk);border-color:var(–sage-dk)}
-.ck-box.au{background:var(–bl);border-color:var(–bl)}
+.ck-box.mn{background:#5f8571 !important;border-color:#5f8571 !important}
+.ck-box.au{background:#6b9fc9 !important;border-color:#6b9fc9 !important}
 .ck-lb{font-size:13px;font-weight:600;flex:1}
 .ck-lb.dn{text-decoration:line-through;color:var(–tx3)}
 .ck-badge{font-size:9px;padding:1px 6px;border-radius:5px;font-weight:700;flex-shrink:0}
@@ -1454,8 +1454,10 @@ function renderFixedChecklist(){
   document.getElementById('ck-fixed-list').innerHTML=D.fixedTasks.map((t,i)=>{
     const v=fd[t.id];
     const isAuto=v==='auto', isDone=!!v;
+    const boxBg=isAuto?'#6b9fc9':isDone?'#5f8571':'#fff';
+    const boxBd=isAuto?'#6b9fc9':isDone?'#5f8571':'#b0c8b8';
     return`<div class="ck-it" onclick="toggleFixed('${t.id}')">
-      <div class="ck-box${isAuto?' au':isDone?' mn':''}">${isDone?CHK:''}</div>
+      <div class="ck-box" style="background:${boxBg};border-color:${boxBd}">${isDone?CHK:''}</div>
       <div class="ck-lb${isDone?' dn':''}">${t.icon} ${t.name}</div>
       ${isAuto?`<span class="ck-badge ck-au-b">自動</span>`:''}
       ${t.cat?`<span style="font-size:9px;color:var(--tx3)">${t.cat}</span>`:''}
@@ -1486,13 +1488,15 @@ function renderCustomTasks(){
   if(!D.tasks.length){
     el.innerHTML='<div class="adv-empty">點右上「＋」新增自訂待辦</div>';return;
   }
-  el.innerHTML=D.tasks.map((t,i)=>
-    `<div class="ck-it" onclick="toggleTask(${i})">
-      <div class="ck-box${t.done?' mn':''}">${t.done?CHK:''}</div>
+  el.innerHTML=D.tasks.map((t,i)=>{
+    const boxBg=t.done?'#5f8571':'#fff';
+    const boxBd=t.done?'#5f8571':'#b0c8b8';
+    return`<div class="ck-it" onclick="toggleTask(${i})">
+      <div class="ck-box" style="background:${boxBg};border-color:${boxBd}">${t.done?CHK:''}</div>
       <div class="ck-lb${t.done?' dn':''}">${t.name}</div>
       ${t.amt?`<div class="ck-amt">${fmt(parseInt(t.amt))}</div>`:''}
       <button class="ck-ed" onclick="delTask(event,${i})">✕</button>
-    </div>`).join('');
+    </div>`;}).join('');
 }
 function toggleTask(i){D.tasks[i].done=!D.tasks[i].done;save();renderCustomTasks()}
 function delTask(e,i){e.stopPropagation();D.tasks.splice(i,1);save();renderCustomTasks()}
