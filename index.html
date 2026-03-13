@@ -105,6 +105,16 @@ box-shadow:0 1px 5px rgba(0,0,0,.05);margin-bottom:8px}
 .inc-chip{flex:1;border-radius:10px;padding:7px 8px;text-align:center}
 .ic-lb{font-size:9px;color:var(–tx2);margin-bottom:2px}
 .ic-vl{font-size:14px;font-weight:700}
+/* allocation rows */
+.alc-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(–bd)}
+.alc-row:last-child{border-bottom:none}
+.alc-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.alc-lbl{font-size:12px;font-weight:700;flex:1}
+.alc-bgt{font-size:10px;color:var(–tx3);text-align:right;width:52px}
+.alc-used{font-size:12px;font-weight:700;text-align:right;width:64px}
+.alc-rem{font-size:10px;font-weight:700;text-align:right;width:60px}
+.alc-bar-wrap{position:relative;width:100%;height:3px;background:var(–bd);border-radius:2px;overflow:hidden;margin-top:3px}
+.alc-bar-f{height:100%;border-radius:2px;transition:width .4s}
 
 /* DAILY BUDGET */
 .day-card{background:var(–card);border-radius:15px;padding:11px 13px;
@@ -165,10 +175,12 @@ gap:9px;margin-bottom:5px;box-shadow:0 1px 4px rgba(0,0,0,.04);position:relative
 .exp-adv{font-size:9px;color:var(–or);font-weight:700;background:var(–or-bg);
 padding:1px 6px;border-radius:5px;margin-top:2px;display:inline-block}
 .exp-am{font-size:14px;font-weight:700;flex-shrink:0}
-.del-btn{position:absolute;right:0;top:0;bottom:0;background:var(–rd);color:#fff;border:none;
-width:0;overflow:hidden;cursor:pointer;font-size:12px;font-weight:700;transition:width .2s;
-display:flex;align-items:center;justify-content:center}
-.exp-it.sw .del-btn{width:60px}
+.exp-sw-btns{position:absolute;right:0;top:0;bottom:0;display:flex;width:0;overflow:hidden;transition:width .2s}
+.exp-it.sw .exp-sw-btns{width:118px}
+.ed-btn{background:#6b9fc9;color:#fff;border:none;width:58px;cursor:pointer;font-size:12px;font-weight:700;
+display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px;flex-shrink:0}
+.del-btn{background:#e07070;color:#fff;border:none;width:60px;cursor:pointer;font-size:12px;font-weight:700;
+display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .empty-st{text-align:center;padding:32px 20px;color:var(–tx3)}
 .bot-sp{height:calc(var(–nav-h) + 8px)}
 
@@ -403,110 +415,26 @@ outline:none;width:130px;text-align:right;font-family:inherit}
 
   <div class="pg-scroll">
     <div class="ca">
-      <!-- 收支概況 -->
+      <!-- 月收入四大分配 -->
       <div class="inc-card">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div class="wlb" style="margin:0">💰 本月收支</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div class="wlb" style="margin:0">💰 月收入分配</div>
           <button class="btn-tx" onclick="openAddIncome()">＋ 記收入</button>
         </div>
-        <div class="inc-row">
-          <div class="inc-chip" style="background:var(--gr-bg)">
-            <div class="ic-lb">收入</div>
-            <div class="ic-vl" id="ic-inc" style="color:#2d8a5a">$0</div>
-          </div>
-          <div class="inc-chip" style="background:var(--rd-bg)">
-            <div class="ic-lb">支出</div>
-            <div class="ic-vl" id="ic-exp" style="color:var(--rd)">$0</div>
-          </div>
-          <div class="inc-chip" style="background:var(--card2);border:1.5px solid var(--bd)">
-            <div class="ic-lb">結餘</div>
-            <div class="ic-vl" id="ic-bal">$0</div>
-          </div>
+        <!-- income total -->
+        <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:11px">
+          <span style="font-size:22px;font-weight:800;color:#2d8a5a" id="alloc-inc-total">$0</span>
+          <span style="font-size:11px;color:var(--tx3)">本月收入</span>
+          <button id="inc-toggle-btn" onclick="toggleIncList()" style="margin-left:auto;
+            background:none;border:none;font-size:11px;color:var(--tx3);
+            font-family:inherit;cursor:pointer;padding:2px 0;display:none"></button>
         </div>
-        <!-- income records list -->
-        <div id="inc-list" style="display:none;margin-top:7px;border-top:1px solid var(--bd);padding-top:7px"></div>
-        <button id="inc-toggle-btn" onclick="toggleIncList()" style="display:none;
-          width:100%;background:none;border:none;font-size:11px;color:var(--tx3);
-          font-family:inherit;cursor:pointer;padding:5px 0 1px;text-align:center"></button>
+        <div id="inc-list" style="display:none;margin-bottom:8px;border-top:1px solid var(--bd);padding-top:7px"></div>
+        <!-- 四宮格分配 -->
+        <div id="alloc-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px"></div>
       </div>
 
 ```
-  <!-- 生活費 + 投資 -->
-  <div class="wrow">
-    <div class="wcard yw">
-      <div class="wlb">🛒 生活費餘額</div>
-      <div class="wvl" id="w-lv" style="color:#9a7010">$0</div>
-      <div class="wsb" style="font-size:9px">僅計「生活費」類別</div>
-      <div id="w-lv-bg" class="wbg ok">✓ 充裕</div>
-      <div style="margin-top:auto;padding-top:6px" class="mbar">
-        <div class="mbar-f" id="w-lv-bar" style="width:0%;background:var(--yw)"></div>
-      </div>
-    </div>
-    <div class="wcard">
-      <div class="wlb">📊 投資餘額</div>
-      <div class="wvl" id="w-iv" style="color:var(--sage-dk)">$0</div>
-      <div class="wsb">已投 <span id="w-iv-sp">$0</span></div>
-      <div style="margin-top:auto;padding-top:6px" class="mbar">
-        <div class="mbar-f" id="w-iv-bar" style="width:0%;background:var(--sage)"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 每日預算 -->
-  <div class="day-card">
-    <div class="day-inner">
-      <svg width="64" height="64" viewBox="0 0 64 64" style="flex-shrink:0">
-        <circle cx="32" cy="32" r="25" fill="none" stroke="var(--bd)" stroke-width="7"/>
-        <circle cx="32" cy="32" r="25" fill="none" stroke="var(--yw)" stroke-width="7"
-          stroke-dasharray="157.08" id="day-arc" stroke-dashoffset="157.08"
-          stroke-linecap="round" transform="rotate(-90 32 32)" style="transition:all .5s"/>
-        <text x="32" y="29" text-anchor="middle" font-size="9.5" font-weight="700" fill="#9a7010" id="day-n1">$0</text>
-        <text x="32" y="40" text-anchor="middle" font-size="7.5" fill="var(--tx3)">/天</text>
-      </svg>
-      <div class="day-info">
-        <div class="day-lbl">生活費每日剩餘預算</div>
-        <div class="day-br">
-          <div class="day-brl">已用</div>
-          <div class="day-bg"><div class="day-bf" id="day-used-f" style="width:0%;background:var(--yw)"></div></div>
-          <div class="day-bv" id="day-used-v">$0</div>
-        </div>
-        <div class="day-br">
-          <div class="day-brl">剩餘</div>
-          <div class="day-bg"><div class="day-bf" id="day-rem-f" style="width:100%;background:#b0e8c8"></div></div>
-          <div class="day-bv" id="day-rem-v">$0</div>
-        </div>
-        <div class="day-ft">本月剩 <strong id="day-days">30</strong> 天</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 付款追蹤 -->
-  <div class="pm-w">
-    <div class="pm-h">
-      <div class="wlb" style="margin:0">💳 付款方式（生活費）</div>
-      <span style="font-size:9px;color:var(--tx3)">預算 $<span id="pm-bgt-lbl">15,000</span></span>
-    </div>
-    <div class="pm-cols">
-      <div class="pm-col" id="pm-ca-col">
-        <div class="pm-cn">💵 現金</div>
-        <div class="pm-cv" id="pm-ca">$0</div>
-        <div class="pm-cs">本月花費</div>
-        <div class="pm-cb"><div class="pm-cf" id="pm-ca-bar" style="width:0%;background:var(--sage)"></div></div>
-      </div>
-      <div class="pm-col" id="pm-cc-col">
-        <div class="pm-cn">💳 信用卡</div>
-        <div class="pm-cv" id="pm-cc">$0</div>
-        <div class="pm-cs">本月刷卡</div>
-        <div class="pm-cb"><div class="pm-cf" id="pm-cc-bar" style="width:0%;background:var(--bl)"></div></div>
-      </div>
-      <div class="pm-col">
-        <div class="pm-cn">📊 合計</div>
-        <div class="pm-cv" id="pm-tot">$0</div>
-        <div class="pm-cs" id="pm-rem" style="color:var(--sage-dk)">剩 $0</div>
-      </div>
-    </div>
-  </div>
-
   <!-- 投資配置 -->
   <div class="iv-w">
     <div class="iv-h">
@@ -793,6 +721,41 @@ outline:none;width:130px;text-align:right;font-family:inherit}
   </div>
 </div>
 
+<!-- EDIT EXPENSE -->
+
+<div class="sh-ov" id="sh-edit-exp">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sh-hnd"></div>
+    <div class="sh-ttl">編輯記錄</div>
+    <div class="sh-body">
+      <div class="amt-w">
+        <span class="amt-sym">$</span>
+        <input class="amt-fi" type="number" id="ee-amt" placeholder="0" inputmode="decimal">
+      </div>
+      <div class="fg"><label class="flb">說明</label>
+        <input class="fi" type="text" id="ee-desc" placeholder="花了什麼？"></div>
+      <div class="fg"><label class="flb">類別</label>
+        <div class="cpills-wrap"><div class="cpills" id="ee-pills"></div></div>
+        <div id="ee-sub-wrap" style="display:none;margin-top:8px">
+          <div style="font-size:10px;color:var(--tx2);font-weight:600;margin-bottom:5px">📂 細項分類（可選）</div>
+          <div class="cpills-wrap"><div class="cpills" id="ee-sub-pills"></div></div>
+        </div>
+        <div id="ee-stk-wrap" style="display:none;margin-top:8px">
+          <label class="flb">投資標的</label>
+          <select class="fi" id="ee-stk" style="font-size:14px"></select>
+        </div>
+      </div>
+      <div class="fg"><label class="flb">付款方式</label>
+        <div class="tgl-row">
+          <button class="tgl" id="ee-pm-ca-btn" onclick="setEePM('cash')">💵 現金</button>
+          <button class="tgl" id="ee-pm-cc-btn" onclick="setEePM('cc')">💳 信用卡</button>
+        </div>
+      </div>
+      <button class="btn-sub" onclick="submitEditExp()">儲存修改</button>
+    </div>
+  </div>
+</div>
+
 <!-- ADD INCOME -->
 
 <div class="sh-ov" id="sh-income">
@@ -1039,7 +1002,7 @@ outline:none;width:130px;text-align:right;font-family:inherit}
 //  DATA MODEL
 // ══════════════════════════════════════
 const CLRS=['#e07070','#e8c96a','#7a9e87','#6b9fc9','#c084fc','#f97316','#34d399','#fb7185','#4a9e65','#a78bfa'];
-const GOAL=1000000, IV_BDG=20000;
+const GOAL=1000000;
 
 function defData(){return{
   livingBudget:15000,
@@ -1189,77 +1152,59 @@ function renderHome(){
   document.getElementById('hdr-inc').textContent=fmt(totInc);
   document.getElementById('hdr-exp').textContent=fmt(totExp);
   document.getElementById('hdr-bank').textContent=fmt(D.bankValue);
-  document.getElementById('ic-inc').textContent=fmt(totInc);
-  document.getElementById('ic-exp').textContent=fmt(totExp);
-  const balEl=document.getElementById('ic-bal');
-  balEl.textContent=(bal>=0?'+':'')+fmt(Math.abs(bal));
-  balEl.style.color=bal>=0?'var(--sage-dk)':'var(--rd)';
+  document.getElementById('alloc-inc-total').textContent=fmt(totInc);
   document.getElementById('mo-btn').textContent=(CM+1)+'月 ▾';
   document.getElementById('an-mo-btn').textContent=(CM+1)+'月 ▾';
   document.getElementById('todo-mo-btn').textContent=(CM+1)+'月 ▾';
 
+  // ── 四宮格分配 ──
+  const livSpent=exps.filter(e=>e.cat==='生活費').reduce((s,e)=>s+e.amt,0);
+  const invSpent=exps.filter(e=>e.cat==='投資').reduce((s,e)=>s+e.amt,0);
+  const fixedCats=new Set(D.fixedTasks.map(t=>t.cat).filter(Boolean));
+  const fixedBgt=D.fixedTasks.reduce((s,t)=>s+(t.amt||0),0);
+  const fixedSpent=exps.filter(e=>fixedCats.has(e.cat)).reduce((s,e)=>s+e.amt,0);
+  const extraBgt=totInc>0?Math.max(totInc-D.livingBudget-D.investBudget-fixedBgt,0):0;
+  const extraSpent=Math.max(totExp-livSpent-invSpent-fixedSpent,0);
+  const allocDefs=[
+    {lbl:'生活費',icon:'🛒',color:'#c4a020',bg:'#fffbee',bgt:D.livingBudget,spent:livSpent,
+      sub:()=>{const d=daysLeft>0?Math.max((D.livingBudget-livSpent)/daysLeft,0):0;
+        return`每天剩 ${d>=10000?'$'+Math.round(d/1000)+'k':fmt(Math.floor(d))}`}},
+    {lbl:'固定開銷',icon:'🏠',color:'#4a7fa8',bg:'#eef5fb',bgt:fixedBgt,spent:fixedSpent,
+      sub:()=>`共 ${D.fixedTasks.length} 項固定`},
+    {lbl:'投資',icon:'📈',color:'#4a7a60',bg:'#eef5f0',bgt:D.investBudget,spent:invSpent,
+      sub:()=>`已投 ${fmt(invSpent)}`},
+    {lbl:'額外支出',icon:'💸',color:'#b84040',bg:'#fdf0f0',bgt:extraBgt,spent:extraSpent,
+      sub:()=>totInc>0?`收入扣三項後剩餘`:`先記收入以計算`},
+  ];
+  const now2=new Date();
+  const thisMonth=CY===now2.getFullYear()&&CM===now2.getMonth();
+  const dim=new Date(CY,CM+1,0).getDate();
+  const daysLeft=thisMonth?Math.max(dim-now2.getDate()+1,1):dim;
+  document.getElementById('alloc-grid').innerHTML=allocDefs.map(a=>{
+    const rem=a.bgt-a.spent, pct=a.bgt>0?Math.min(a.spent/a.bgt*100,100):0;
+    const over=rem<0;
+    const rc=over?'#c0392b':pct>80?'#d4820a':a.color;
+    const remTxt=over?`超支 ${fmt(Math.abs(rem))}`:(a.bgt>0?`剩 ${fmt(rem)}`:`已用 ${fmt(a.spent)}`);
+    return`<div style="background:${a.bg};border-radius:14px;padding:11px 12px;display:flex;flex-direction:column;gap:3px;min-width:0">
+      <div style="font-size:10px;color:${a.color};font-weight:700">${a.icon} ${a.lbl}</div>
+      <div style="font-size:18px;font-weight:800;color:${over?'#c0392b':'#1a2e20'};line-height:1.15">${fmt(a.spent)}</div>
+      <div style="font-size:9px;color:#888;margin-bottom:2px">${a.sub()}</div>
+      ${a.bgt>0?`<div style="height:3px;background:rgba(0,0,0,.08);border-radius:2px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${a.color};border-radius:2px;transition:width .4s"></div></div>`:''}
+      <div style="font-size:10px;font-weight:700;color:${rc};margin-top:1px">${a.bgt>0?remTxt:(totInc>0?`已用 ${fmt(a.spent)}`:'—')}</div>
+    </div>`;
+  }).join('');
+
   // income toggle button
   const incToggle=document.getElementById('inc-toggle-btn');
   if(incs.length){
-    incToggle.style.display='block';
-    incToggle.textContent=incListShown?'▲ 收合':'▼ 展開 '+incs.length+' 筆收入明細';
+    incToggle.style.display='inline-block';
+    incToggle.textContent=incListShown?'▲ 收合':'▼ '+incs.length+' 筆收入明細';
     renderIncList();
   }else{
     incToggle.style.display='none';
     document.getElementById('inc-list').style.display='none';
   }
-
-  // living
-  const ls=exps.filter(e=>e.cat==='生活費').reduce((s,e)=>s+e.amt,0);
-  const lr=LBDG-ls, lp=ls/LBDG*100;
-  document.getElementById('w-lv').textContent=fmt(lr);
-  document.getElementById('w-lv-bar').style.width=Math.min(lp,100)+'%';
-  const lbEl=document.getElementById('w-lv-bg');
-  if(lp<60){lbEl.className='wbg ok';lbEl.textContent='✓ 充裕';}
-  else if(lp<85){lbEl.className='wbg warn';lbEl.textContent='⚠ 注意';}
-  else{lbEl.className='wbg danger';lbEl.textContent='🚨 快超!';}
-
-  // invest
-  const iv=exps.filter(e=>e.cat==='投資').reduce((s,e)=>s+e.amt,0);
-  document.getElementById('w-iv').textContent=fmt(IV_BDG-iv);
-  document.getElementById('w-iv-sp').textContent=fmt(iv);
-  document.getElementById('w-iv-bar').style.width=Math.min(iv/IV_BDG*100,100)+'%';
-
-  // daily budget
-  const now=new Date();
-  const thisMonth=CY===now.getFullYear()&&CM===now.getMonth();
-  const dim=new Date(CY,CM+1,0).getDate();
-  const daysLeft=thisMonth?Math.max(dim-now.getDate()+1,1):dim;
-  const daily=daysLeft>0?Math.max(lr/daysLeft,0):0;
-  const remPct=Math.max(100-lp,0);
-  const arc=document.getElementById('day-arc');
-  arc.style.strokeDashoffset=157.08*(1-remPct/100);
-  arc.style.stroke=lp>=85?'var(--rd)':lp>=60?'var(--or)':'var(--yw)';
-  const dn=document.getElementById('day-n1');
-  dn.textContent=daily>=10000?'$'+Math.round(daily/1000)+'k':fmt(Math.floor(daily));
-  dn.setAttribute('font-size',daily>=10000?'8':'9.5');
-  document.getElementById('day-used-f').style.width=Math.min(lp,100)+'%';
-  document.getElementById('day-used-f').style.background=lp>=85?'var(--rd)':lp>=60?'var(--or)':'var(--yw)';
-  document.getElementById('day-rem-f').style.width=remPct+'%';
-  document.getElementById('day-used-v').textContent=fmt(ls);
-  document.getElementById('day-rem-v').textContent=fmt(Math.max(lr,0));
-  document.getElementById('day-days').textContent=daysLeft;
-
-  // payment (生活費 only)
-  const lvE=exps.filter(e=>e.cat==='生活費');
-  const cash=lvE.filter(e=>e.pm==='cash').reduce((s,e)=>s+e.amt,0);
-  const cc=lvE.filter(e=>e.pm==='cc').reduce((s,e)=>s+e.amt,0);
-  const pmTot=cash+cc, pmRem=LBDG-pmTot;
-  document.getElementById('pm-ca').textContent=fmt(cash);
-  document.getElementById('pm-cc').textContent=fmt(cc);
-  document.getElementById('pm-tot').textContent=fmt(pmTot);
-  document.getElementById('pm-bgt-lbl').textContent=LBDG.toLocaleString();
-  document.getElementById('pm-ca-bar').style.width=Math.min(cash/LBDG*100,100)+'%';
-  document.getElementById('pm-cc-bar').style.width=Math.min(cc/LBDG*100,100)+'%';
-  const remEl=document.getElementById('pm-rem');
-  remEl.textContent=pmRem>=0?`剩 ${fmt(pmRem)}`:`超支 ${fmt(Math.abs(pmRem))}`;
-  remEl.style.color=pmRem<0?'var(--rd)':'var(--sage-dk)';
-  document.getElementById('pm-cc-col').className='pm-col'+(cc>LBDG*0.65?' alrt':'');
 
   renderStocks(exps);
   renderExpList(exps);
@@ -1534,7 +1479,7 @@ function renderStocks(exps){
     <div style="width:44px;text-align:right">預算</div>
     <div style="width:50px;text-align:right">剩餘</div></div>`:''
   h+=D.stocks.map(s=>{
-    const bgt=Math.round(IV_BDG*s.pct/100);
+    const bgt=Math.round(D.investBudget*s.pct/100);
     const sp=exps.filter(e=>e.cat==='投資'&&e.stockCode===s.code).reduce((s,e)=>s+e.amt,0);
     const rem=bgt-sp, p=bgt?Math.min(sp/bgt*100,100):0;
     const rc=rem<0?'var(--rd)':rem===bgt?'var(--tx3)':'var(--sage-dk)';
@@ -1622,7 +1567,10 @@ function renderExpList(exps){
             ${advTag}
           </div>
           <div class="exp-am">-${fmt(e.amt)}</div>
-          <button class="del-btn" onclick="delExp(event,${e.idx})">刪除</button>
+          <div class="exp-sw-btns">
+            <button class="ed-btn" onclick="openEditExp(event,${e.idx})">✎<span style="font-size:9px">編輯</span></button>
+            <button class="del-btn" onclick="delExp(event,${e.idx})">刪除</button>
+          </div>
         </div>`;
       }).join('')+'</div>';
   }
@@ -1665,6 +1613,77 @@ function swItem(idx){
   swEl=el.classList.contains('sw')?`ei-${idx}`:null;
 }
 function delExp(e,idx){e.stopPropagation();curMD().expenses.splice(idx,1);save();renderHome()}
+
+// ── EDIT EXPENSE ──
+let eeIdx=null, eeCat=null, eeSubCat=null, eePM='cash';
+function openEditExp(e,idx){
+  e.stopPropagation();
+  const exp=curMD().expenses[idx];
+  if(!exp)return;
+  eeIdx=idx; eeCat=exp.cat; eeSubCat=exp.subCat||null; eePM=exp.pm||'cash';
+  document.getElementById('ee-amt').value=exp.amt||'';
+  document.getElementById('ee-desc').value=exp.desc||'';
+  buildEeMainPills(); buildEeSubPills(); updEeCatUI(eeCat);
+  // set stock if investment
+  if(eeCat==='投資'){
+    const sel=document.getElementById('ee-stk');
+    if(exp.stockCode)sel.value=exp.stockCode;
+  }
+  setEePM(eePM);
+  // close swipe
+  document.getElementById(`ei-${idx}`)?.classList.remove('sw');
+  swEl=null;
+  openSheet('sh-edit-exp');
+  setTimeout(()=>document.getElementById('ee-amt').focus(),350);
+}
+function buildEeMainPills(){
+  document.getElementById('ee-pills').innerHTML=D.cats.map(c=>{
+    const isSel=c.name===eeCat;
+    return`<button class="cpill${isSel?' sel':''}"
+      style="${isSel?`background:${c.color};border-color:${c.color}`:''}"
+      onclick="pickEeCat('${c.name}')">${c.icon} ${c.name}</button>`;
+  }).join('');
+}
+function buildEeSubPills(){
+  document.getElementById('ee-sub-pills').innerHTML=D.subCats.map(c=>{
+    const isSel=c.name===eeSubCat;
+    return`<button class="cpill${isSel?' sel':''}"
+      style="${isSel?`background:${c.color};border-color:${c.color}`:''}"
+      onclick="pickEeSubCat('${c.name}')">${c.icon} ${c.name}</button>`;
+  }).join('');
+}
+function pickEeCat(name){
+  eeCat=name; eeSubCat=null;
+  buildEeMainPills(); updEeCatUI(name);
+}
+function pickEeSubCat(name){eeSubCat=name;buildEeSubPills();}
+function updEeCatUI(cat){
+  document.getElementById('ee-sub-wrap').style.display='block';
+  const w=document.getElementById('ee-stk-wrap');
+  if(cat==='投資'){
+    w.style.display='block';
+    document.getElementById('ee-stk').innerHTML=D.stocks.map(s=>
+      `<option value="${s.code}">${s.name} (${s.code})</option>`).join('');
+  } else { w.style.display='none'; }
+}
+function setEePM(pm){
+  eePM=pm;
+  document.getElementById('ee-pm-ca-btn').className='tgl'+(pm==='cash'?' c':'');
+  document.getElementById('ee-pm-cc-btn').className='tgl'+(pm==='cc'?' c':'');
+}
+function submitEditExp(){
+  const amt=parseInt(document.getElementById('ee-amt').value);
+  if(!amt||amt<=0){document.getElementById('ee-amt').focus();return;}
+  const desc=document.getElementById('ee-desc').value.trim();
+  const cat=eeCat||D.cats[0]?.name;
+  const stk=cat==='投資'?document.getElementById('ee-stk').value:undefined;
+  const exp=curMD().expenses[eeIdx];
+  if(!exp)return;
+  exp.amt=amt; exp.desc=desc||cat; exp.cat=cat;
+  exp.subCat=eeSubCat||undefined; exp.pm=eePM;
+  if(stk)exp.stockCode=stk; else delete exp.stockCode;
+  save(); closeSheet('sh-edit-exp'); renderHome();
+}
 
 // ══════════════════════════════════════
 //  ADD EXPENSE
