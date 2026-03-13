@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
@@ -48,27 +49,33 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
 .page.active{display:flex}
 
 /* HEADER */
-.hdr{background:linear-gradient(155deg,var(--sage-dk),var(--sage));
-  padding-top:70px;padding-right:16px;padding-bottom:14px;padding-left:16px;
-  flex-shrink:0;position:relative;overflow:hidden;z-index:10}
-.hdr::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;
-  background:rgba(255,255,255,.06);border-radius:50%}
+.hdr{background:linear-gradient(155deg,var(–sage-dk),var(–sage));
+padding-top:70px;padding-right:16px;padding-bottom:14px;padding-left:16px;
+flex-shrink:0;position:relative;overflow:hidden;z-index:10}
+.hdr::before{content:’’;position:absolute;top:-60px;right:-60px;width:200px;height:200px;
+background:rgba(255,255,255,.06);border-radius:50%}
 .hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;position:relative;z-index:1}
 .hdr-title{font-size:16px;font-weight:700;color:#fff}
 .hdr-r{display:flex;align-items:center;gap:7px}
 .mo-btn{background:rgba(255,255,255,.2);border:none;border-radius:18px;padding:5px 11px;
-  color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer}
+color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer}
 .hdr-ico{width:32px;height:32px;background:rgba(255,255,255,.18);border:none;border-radius:50%;
-  color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-/* FAB — sticky inside home scroll area */
-.fab-wrap{position:sticky;bottom:calc(var(--nav-h)+16px+var(--sb));
-  display:flex;justify-content:flex-end;padding-right:18px;
-  pointer-events:none;z-index:100;margin-top:-52px;height:52px}
-.fab{pointer-events:auto;background:var(--sage-dk);color:#fff;border:none;border-radius:28px;
-  height:52px;padding:0 22px;font-size:15px;font-weight:700;font-family:inherit;
-  cursor:pointer;display:flex;align-items:center;gap:5px;
-  box-shadow:0 4px 20px rgba(95,133,113,.45)}
+color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+/* FAB — fixed bottom right, always visible, never blocks content */
+.fab-wrap{position:fixed;bottom:calc(var(–nav-h) + 16px + env(safe-area-inset-bottom,34px));
+right:16px;pointer-events:none;z-index:200;height:52px;display:flex;align-items:center}
+.fab{pointer-events:auto;background:var(–sage-dk);color:#fff;border:none;border-radius:28px;
+height:52px;padding:0 22px;font-size:15px;font-weight:700;font-family:inherit;
+cursor:pointer;display:flex;align-items:center;gap:5px;
+box-shadow:0 4px 20px rgba(95,133,113,.45)}
 .fab:active{opacity:.82}
+/* Week collapse */
+.week-collapse{margin:0 12px 4px}
+.week-hdr{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(–card2);
+border-radius:10px;cursor:pointer;font-size:12px;font-weight:600;color:var(–tx2)}
+.week-arr{font-size:10px;color:var(–tx3);transition:transform .2s}
+.week-arr.open{transform:rotate(90deg)}
+.week-body{padding-top:2px}
 .hdr-row{display:flex;gap:6px;position:relative;z-index:1;padding:0 4px}
 .hdr-c{flex:1;background:rgba(255,255,255,.14);border-radius:12px;padding:8px 11px}
 .hdr-cl{font-size:9px;color:rgba(255,255,255,.65);margin-bottom:2px;display:flex;align-items:center;gap:3px}
@@ -81,287 +88,289 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
 
 /* WIDGET CARDS */
 .wrow{display:flex;gap:8px;margin-bottom:8px}
-.wcard{background:var(--card);border-radius:15px;padding:11px 13px;
-  box-shadow:0 1px 5px rgba(0,0,0,.05);flex:1;min-width:0;
-  display:flex;flex-direction:column}
-.wcard.yw{background:var(--yw-bg)}
-.wlb{font-size:10px;color:var(--tx2);font-weight:600;margin-bottom:4px}
+.wcard{background:var(–card);border-radius:15px;padding:11px 13px;
+box-shadow:0 1px 5px rgba(0,0,0,.05);flex:1;min-width:0;
+display:flex;flex-direction:column}
+.wcard.yw{background:var(–yw-bg)}
+.wlb{font-size:10px;color:var(–tx2);font-weight:600;margin-bottom:4px}
 .wvl{font-size:20px;font-weight:700;line-height:1.2;min-height:24px}
-.wsb{font-size:10px;color:var(--tx3);margin-top:2px}
+.wsb{font-size:10px;color:var(–tx3);margin-top:2px}
 .wbg{display:inline-flex;align-items:center;padding:2px 7px;border-radius:9px;
-  font-size:10px;font-weight:700;margin-top:4px;align-self:flex-start}
+font-size:10px;font-weight:700;margin-top:4px;align-self:flex-start}
 .ok{background:#e6f5eb;color:#3d9058}
 .warn{background:#fef8e6;color:#b08820}
 .danger{background:#fceaea;color:#b84040}
-.mbar{height:3px;background:var(--bd);border-radius:2px;overflow:hidden;margin-top:6px}
+.mbar{height:3px;background:var(–bd);border-radius:2px;overflow:hidden;margin-top:6px}
 .mbar-f{height:100%;border-radius:2px;transition:width .4s}
 
 /* 收支卡 */
-.inc-card{background:var(--card);border-radius:15px;padding:11px 13px;
-  box-shadow:0 1px 5px rgba(0,0,0,.05);margin-bottom:8px}
+.inc-card{background:var(–card);border-radius:15px;padding:11px 13px;
+box-shadow:0 1px 5px rgba(0,0,0,.05);margin-bottom:8px}
 .inc-row{display:flex;gap:6px;margin-top:7px}
 .inc-chip{flex:1;border-radius:10px;padding:7px 8px;text-align:center}
-.ic-lb{font-size:9px;color:var(--tx2);margin-bottom:2px}
+.ic-lb{font-size:9px;color:var(–tx2);margin-bottom:2px}
 .ic-vl{font-size:14px;font-weight:700}
 
 /* DAILY BUDGET */
-.day-card{background:var(--card);border-radius:15px;padding:11px 13px;
-  box-shadow:0 1px 5px rgba(0,0,0,.05);margin-bottom:8px}
+.day-card{background:var(–card);border-radius:15px;padding:11px 13px;
+box-shadow:0 1px 5px rgba(0,0,0,.05);margin-bottom:8px}
 .day-inner{display:flex;align-items:center;gap:11px}
 .day-info{flex:1}
-.day-lbl{font-size:10px;font-weight:600;color:var(--tx2);margin-bottom:5px}
+.day-lbl{font-size:10px;font-weight:600;color:var(–tx2);margin-bottom:5px}
 .day-br{display:flex;align-items:center;gap:5px;margin-bottom:3px}
-.day-brl{font-size:9px;color:var(--tx3);width:20px}
-.day-bg{flex:1;height:4px;background:var(--bd);border-radius:2px;overflow:hidden}
+.day-brl{font-size:9px;color:var(–tx3);width:20px}
+.day-bg{flex:1;height:4px;background:var(–bd);border-radius:2px;overflow:hidden}
 .day-bf{height:100%;border-radius:2px}
-.day-bv{font-size:9px;font-weight:600;color:var(--tx2);width:50px;text-align:right}
-.day-ft{font-size:10px;color:var(--tx3);margin-top:3px}
+.day-bv{font-size:9px;font-weight:600;color:var(–tx2);width:50px;text-align:right}
+.day-ft{font-size:10px;color:var(–tx3);margin-top:3px}
 
 /* PM WIDGET */
-.pm-w{background:var(--card);border-radius:15px;padding:11px 13px;
-  box-shadow:0 1px 5px rgba(0,0,0,.05);margin-bottom:8px}
+.pm-w{background:var(–card);border-radius:15px;padding:11px 13px;
+box-shadow:0 1px 5px rgba(0,0,0,.05);margin-bottom:8px}
 .pm-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .pm-cols{display:flex;gap:6px}
-.pm-col{flex:1;background:var(--card2);border-radius:10px;padding:7px 9px;border:1.5px solid var(--bd)}
-.pm-col.alrt{border-color:var(--rd);background:var(--rd-bg)}
-.pm-cn{font-size:9px;color:var(--tx2);font-weight:700;margin-bottom:1px}
+.pm-col{flex:1;background:var(–card2);border-radius:10px;padding:7px 9px;border:1.5px solid var(–bd)}
+.pm-col.alrt{border-color:var(–rd);background:var(–rd-bg)}
+.pm-cn{font-size:9px;color:var(–tx2);font-weight:700;margin-bottom:1px}
 .pm-cv{font-size:14px;font-weight:700}
-.pm-cs{font-size:9px;color:var(--tx3)}
-.pm-cb{height:3px;background:var(--bd);border-radius:2px;overflow:hidden;margin-top:4px}
+.pm-cs{font-size:9px;color:var(–tx3)}
+.pm-cb{height:3px;background:var(–bd);border-radius:2px;overflow:hidden;margin-top:4px}
 .pm-cf{height:100%;border-radius:2px}
 
 /* INVEST */
-.iv-w{background:var(--card);border-radius:15px;padding:11px 13px;
-  box-shadow:0 1px 5px rgba(0,0,0,.05);margin-bottom:8px}
+.iv-w{background:var(–card);border-radius:15px;padding:11px 13px;
+box-shadow:0 1px 5px rgba(0,0,0,.05);margin-bottom:8px}
 .iv-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .rt-bar{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:3px 0}
-.rt-ca{background:var(--yw)}.rt-st{background:var(--sage)}
+.rt-ca{background:var(–yw)}.rt-st{background:var(–sage)}
 .rt-lb{display:flex;justify-content:space-between;font-size:10px;margin-bottom:7px}
-.sr{display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(--bd)}
+.sr{display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(–bd)}
 .sr:last-child{border-bottom:none}
 .sr-dot{width:7px;height:7px;border-radius:2px;flex-shrink:0}
 .sr-inf{flex:1;min-width:0}
-.sr-nm{font-size:12px;font-weight:700}.sr-cd{font-size:9px;color:var(--tx3)}
-.sr-bar{height:2px;background:var(--bd);border-radius:1px;overflow:hidden;margin-top:2px}
+.sr-nm{font-size:12px;font-weight:700}.sr-cd{font-size:9px;color:var(–tx3)}
+.sr-bar{height:2px;background:var(–bd);border-radius:1px;overflow:hidden;margin-top:2px}
 .sr-bf{height:100%;border-radius:1px}
-.sr-pct{font-size:10px;color:var(--tx2);width:26px;text-align:right}
-.sr-bgt{font-size:10px;color:var(--tx3);width:44px;text-align:right}
+.sr-pct{font-size:10px;color:var(–tx2);width:26px;text-align:right}
+.sr-bgt{font-size:10px;color:var(–tx3);width:44px;text-align:right}
 .sr-rem{font-size:10px;font-weight:700;width:50px;text-align:right}
 
 /* EXP LIST */
 .exp-sec{padding:0 12px}
 .exp-grp{margin-bottom:2px}
 .exp-dt-hdr{display:flex;align-items:center;gap:7px;padding:8px 2px 4px}
-.exp-dt-lbl{font-size:11px;color:var(--tx3);font-weight:700}
-.exp-dt-amt{font-size:10px;color:var(--tx3)}
-.exp-it{background:var(--card);border-radius:13px;padding:10px 11px;display:flex;align-items:center;
-  gap:9px;margin-bottom:5px;box-shadow:0 1px 4px rgba(0,0,0,.04);position:relative;overflow:hidden;cursor:pointer}
+.exp-dt-lbl{font-size:11px;color:var(–tx3);font-weight:700}
+.exp-dt-amt{font-size:10px;color:var(–tx3)}
+.exp-it{background:var(–card);border-radius:13px;padding:10px 11px;display:flex;align-items:center;
+gap:9px;margin-bottom:5px;box-shadow:0 1px 4px rgba(0,0,0,.04);position:relative;overflow:hidden;cursor:pointer}
 .exp-ic{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
 .exp-inf{flex:1;min-width:0}
 .exp-nm{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.exp-me{font-size:10px;color:var(--tx3);margin-top:1px}
-.exp-adv{font-size:9px;color:var(--or);font-weight:700;background:var(--or-bg);
-  padding:1px 6px;border-radius:5px;margin-top:2px;display:inline-block}
+.exp-me{font-size:10px;color:var(–tx3);margin-top:1px}
+.exp-adv{font-size:9px;color:var(–or);font-weight:700;background:var(–or-bg);
+padding:1px 6px;border-radius:5px;margin-top:2px;display:inline-block}
 .exp-am{font-size:14px;font-weight:700;flex-shrink:0}
-.del-btn{position:absolute;right:0;top:0;bottom:0;background:var(--rd);color:#fff;border:none;
-  width:0;overflow:hidden;cursor:pointer;font-size:12px;font-weight:700;transition:width .2s;
-  display:flex;align-items:center;justify-content:center}
+.del-btn{position:absolute;right:0;top:0;bottom:0;background:var(–rd);color:#fff;border:none;
+width:0;overflow:hidden;cursor:pointer;font-size:12px;font-weight:700;transition:width .2s;
+display:flex;align-items:center;justify-content:center}
 .exp-it.sw .del-btn{width:60px}
-.empty-st{text-align:center;padding:32px 20px;color:var(--tx3)}
-.bot-sp{height:calc(var(--nav-h)+20px+var(--sb))}
+.empty-st{text-align:center;padding:32px 20px;color:var(–tx3)}
+.bot-sp{height:calc(var(–nav-h)+20px+var(–sb))}
 
 /* SEC HDR */
 .sec-h{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 6px}
-.sec-t{font-size:14px;font-weight:700}.sec-s{font-size:11px;color:var(--tx2)}
-.btn-tx{font-size:12px;color:var(--sage-dk);font-weight:700;background:none;border:none;cursor:pointer;font-family:inherit}
+.sec-t{font-size:14px;font-weight:700}.sec-s{font-size:11px;color:var(–tx2)}
+.btn-tx{font-size:12px;color:var(–sage-dk);font-weight:700;background:none;border:none;cursor:pointer;font-family:inherit}
 
 /* ═══ TODO PAGE ═══ */
 .todo-pg{flex:1;overflow-y:auto;padding:0 12px}
 .todo-hdr-mini{padding-top:70px;padding-right:16px;padding-bottom:12px;padding-left:16px;
-  background:linear-gradient(155deg,var(--sage-dk),var(--sage));
-  flex-shrink:0;position:relative;overflow:hidden}
-.todo-hdr-mini::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;
-  background:rgba(255,255,255,.06);border-radius:50%}
+background:linear-gradient(155deg,var(–sage-dk),var(–sage));
+flex-shrink:0;position:relative;overflow:hidden}
+.todo-hdr-mini::before{content:’’;position:absolute;top:-60px;right:-60px;width:200px;height:200px;
+background:rgba(255,255,255,.06);border-radius:50%}
 .todo-title{font-size:16px;font-weight:700;color:#fff;position:relative;z-index:1;
-  display:flex;justify-content:space-between;align-items:center}
+display:flex;justify-content:space-between;align-items:center}
 
 /* advance section */
-.adv-sec{background:var(--card);border-radius:15px;margin:12px 0 8px;
-  box-shadow:0 1px 5px rgba(0,0,0,.05);overflow:hidden}
-.adv-sec-hdr{padding:12px 14px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center}
-.adv-tot-badge{background:var(--or-bg);color:var(--or);font-size:11px;font-weight:700;
-  padding:3px 9px;border-radius:9px}
-.adv-person-card{padding:12px 14px;border-bottom:1px solid var(--bd)}
+.adv-sec{background:var(–card);border-radius:15px;margin:12px 0 8px;
+box-shadow:0 1px 5px rgba(0,0,0,.05);overflow:hidden}
+.adv-sec-hdr{padding:12px 14px;border-bottom:1px solid var(–bd);display:flex;justify-content:space-between;align-items:center}
+.adv-tot-badge{background:var(–or-bg);color:var(–or);font-size:11px;font-weight:700;
+padding:3px 9px;border-radius:9px}
+.adv-person-card{padding:12px 14px;border-bottom:1px solid var(–bd)}
 .adv-person-card:last-child{border-bottom:none}
 .adv-person-top{display:flex;align-items:center;gap:10px;margin-bottom:7px}
-.adv-av{width:36px;height:36px;border-radius:50%;background:var(--or-bg);border:2px solid var(--or);
-  display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;
-  color:var(--or);flex-shrink:0}
+.adv-av{width:36px;height:36px;border-radius:50%;background:var(–or-bg);border:2px solid var(–or);
+display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;
+color:var(–or);flex-shrink:0}
 .adv-pname{font-size:14px;font-weight:700}
-.adv-ptot{font-size:16px;font-weight:800;color:var(--or)}
-.settle-btn{font-size:11px;padding:5px 12px;border-radius:9px;border:1.5px solid var(--or);
-  color:var(--or);background:transparent;cursor:pointer;font-family:inherit;font-weight:700}
-.settle-btn:active{background:var(--or-bg)}
+.adv-ptot{font-size:16px;font-weight:800;color:var(–or)}
+.settle-btn{font-size:11px;padding:5px 12px;border-radius:9px;border:1.5px solid var(–or);
+color:var(–or);background:transparent;cursor:pointer;font-family:inherit;font-weight:700}
+.settle-btn:active{background:var(–or-bg)}
 .adv-item-row{display:flex;align-items:center;justify-content:space-between;
-  padding:5px 0;border-top:1px dashed var(--bd)}
-.adv-item-desc{font-size:12px;color:var(--tx2)}
-.adv-item-dt{font-size:10px;color:var(--tx3);margin-top:1px}
-.adv-item-amt{font-size:12px;font-weight:700;color:var(--or)}
-.adv-empty{padding:20px;text-align:center;color:var(--tx3);font-size:13px}
+padding:5px 0;border-top:1px dashed var(–bd)}
+.adv-item-desc{font-size:12px;color:var(–tx2)}
+.adv-item-dt{font-size:10px;color:var(–tx3);margin-top:1px}
+.adv-item-amt{font-size:12px;font-weight:700;color:var(–or)}
+.adv-empty{padding:20px;text-align:center;color:var(–tx3);font-size:13px}
 
 /* settled history */
-.settled-toggle{font-size:11px;color:var(--tx3);background:none;border:none;cursor:pointer;
-  padding:8px 14px;width:100%;text-align:left;font-family:inherit}
-.settled-row{display:flex;align-items:center;gap:9px;padding:8px 14px;border-top:1px solid var(--bd);opacity:.65}
-.settled-ic{width:28px;height:28px;border-radius:50%;background:var(--gr-bg);border:1.5px solid var(--gr);
-  display:flex;align-items:center;justify-content:center;font-size:11px;color:#2d8a5a;flex-shrink:0}
+.settled-toggle{font-size:11px;color:var(–tx3);background:none;border:none;cursor:pointer;
+padding:8px 14px;width:100%;text-align:left;font-family:inherit}
+.settled-row{display:flex;align-items:center;gap:9px;padding:8px 14px;border-top:1px solid var(–bd);opacity:.65}
+.settled-ic{width:28px;height:28px;border-radius:50%;background:var(–gr-bg);border:1.5px solid var(–gr);
+display:flex;align-items:center;justify-content:center;font-size:11px;color:#2d8a5a;flex-shrink:0}
 
 /* checklist section */
-.ck-sec{background:var(--card);border-radius:15px;margin-bottom:8px;
-  box-shadow:0 1px 5px rgba(0,0,0,.05);overflow:hidden}
-.ck-sec-hdr{padding:12px 14px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center}
-.ck-it{display:flex;align-items:center;gap:9px;padding:11px 14px;border-bottom:1px solid var(--bd);cursor:pointer}
+.ck-sec{background:var(–card);border-radius:15px;margin-bottom:8px;
+box-shadow:0 1px 5px rgba(0,0,0,.05);overflow:hidden}
+.ck-sec-hdr{padding:12px 14px;border-bottom:1px solid var(–bd);display:flex;justify-content:space-between;align-items:center}
+.ck-it{display:flex;align-items:center;gap:9px;padding:11px 14px;border-bottom:1px solid var(–bd);cursor:pointer}
 .ck-it:last-child{border-bottom:none}
-.ck-box{width:22px;height:22px;border-radius:7px;border:2px solid var(--bd);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
-.ck-box.mn{background:var(--sage-dk);border-color:var(--sage-dk)}
-.ck-box.au{background:var(--bl);border-color:var(--bl)}
+.ck-box{width:22px;height:22px;border-radius:7px;border:2px solid var(–bd);
+display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.ck-box.mn{background:var(–sage-dk);border-color:var(–sage-dk)}
+.ck-box.au{background:var(–bl);border-color:var(–bl)}
 .ck-lb{font-size:13px;font-weight:600;flex:1}
-.ck-lb.dn{text-decoration:line-through;color:var(--tx3)}
+.ck-lb.dn{text-decoration:line-through;color:var(–tx3)}
 .ck-badge{font-size:9px;padding:1px 6px;border-radius:5px;font-weight:700;flex-shrink:0}
-.ck-au-b{background:var(--bl-bg);color:var(--bl)}
-.ck-flex-b{background:var(--or-bg);color:var(--or)}
-.ck-amt{font-size:12px;font-weight:700;color:var(--tx2);flex-shrink:0}
-.ck-ed{font-size:12px;color:var(--tx3);background:none;border:none;cursor:pointer;padding:2px 6px}
+.ck-au-b{background:var(–bl-bg);color:var(–bl)}
+.ck-flex-b{background:var(–or-bg);color:var(–or)}
+.ck-amt{font-size:12px;font-weight:700;color:var(–tx2);flex-shrink:0}
+.ck-ed{font-size:12px;color:var(–tx3);background:none;border:none;cursor:pointer;padding:2px 6px}
 .ck-done-foot{padding:10px 14px;text-align:center;font-size:12px;color:#3d9058;font-weight:700}
 
 /* NAV */
-.bot-nav{background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-top:1px solid var(--bd);
-  display:flex;padding:6px 0 calc(4px + var(--sb));flex-shrink:0}
+.bot-nav{background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-top:1px solid var(–bd);
+display:flex;padding:6px 0 calc(4px + var(–sb));flex-shrink:0}
 .nav-it{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;
-  cursor:pointer;border:none;background:none;font-family:inherit}
+cursor:pointer;border:none;background:none;font-family:inherit}
 .nav-ic{font-size:20px;line-height:1}
-.nav-lb{font-size:9px;color:var(--tx3);font-weight:600}
-.nav-it.active .nav-lb{color:var(--sage-dk);font-weight:700}
-.n-dot{position:absolute;top:-3px;right:-5px;background:var(--rd);color:#fff;width:15px;height:15px;
-  border-radius:50%;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.nav-lb{font-size:9px;color:var(–tx3);font-weight:600}
+.nav-it.active .nav-lb{color:var(–sage-dk);font-weight:700}
+.n-dot{position:absolute;top:-3px;right:-5px;background:var(–rd);color:#fff;width:15px;height:15px;
+border-radius:50%;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center}
 
 /* SHEET */
 .sh-ov{position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:200;display:none;
-  align-items:flex-end;backdrop-filter:blur(2px)}
+align-items:flex-end;backdrop-filter:blur(2px)}
 /* Confirm modal */
 .cfm-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;
-  display:none;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+display:none;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
 .cfm-ov.open{display:flex}
 .cfm-box{background:#fff;border-radius:20px;padding:22px 20px 16px;width:min(320px,88vw);
-  box-shadow:0 8px 40px rgba(0,0,0,.18);animation:popIn .2s cubic-bezier(.34,1.56,.64,1)}
+box-shadow:0 8px 40px rgba(0,0,0,.18);animation:popIn .2s cubic-bezier(.34,1.56,.64,1)}
 @keyframes popIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
 .cfm-ttl{font-size:16px;font-weight:700;margin-bottom:7px}
-.cfm-msg{font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:16px}
+.cfm-msg{font-size:13px;color:var(–tx2);line-height:1.6;margin-bottom:16px}
 .cfm-btns{display:flex;gap:8px}
-.cfm-cancel{flex:1;padding:11px;border-radius:12px;border:1.5px solid var(--bd);
-  background:var(--card2);font-size:14px;font-weight:700;font-family:inherit;cursor:pointer}
+.cfm-cancel{flex:1;padding:11px;border-radius:12px;border:1.5px solid var(–bd);
+background:var(–card2);font-size:14px;font-weight:700;font-family:inherit;cursor:pointer}
 .cfm-ok{flex:1;padding:11px;border-radius:12px;border:none;
-  background:var(--rd);color:#fff;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer}
-.cfm-ok.safe{background:var(--sage-dk)}
+background:var(–rd);color:#fff;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer}
+.cfm-ok.safe{background:var(–sage-dk)}
 .sh-ov.open{display:flex}
-.sheet{background:#fff;border-radius:24px 24px 0 0;padding:0 0 calc(22px + var(--sb));
-  width:100%;max-height:92vh;overflow-y:auto;
-  animation:slideUp .26s cubic-bezier(.34,1.36,.64,1)}
+.sheet{background:#fff;border-radius:24px 24px 0 0;padding:0 0 calc(22px + var(–sb));
+width:100%;max-height:92vh;overflow-y:auto;
+animation:slideUp .26s cubic-bezier(.34,1.36,.64,1)}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.sh-hnd{width:36px;height:4px;background:var(--bd);border-radius:2px;margin:12px auto 14px}
+.sh-hnd{width:36px;height:4px;background:var(–bd);border-radius:2px;margin:12px auto 14px}
 .sh-ttl{text-align:center;font-size:17px;font-weight:700;margin-bottom:15px}
 .sh-body{padding:0 17px}
 .fg{margin-bottom:11px}
-.flb{font-size:12px;font-weight:700;color:var(--tx2);margin-bottom:5px;display:block}
-.fi{width:100%;background:var(--bg);border:1.5px solid var(--bd);border-radius:12px;
-  padding:10px 12px;font-size:15px;font-family:inherit;color:var(--tx);outline:none;-webkit-appearance:none}
-.fi:focus{border-color:var(--sage)}
+.flb{font-size:12px;font-weight:700;color:var(–tx2);margin-bottom:5px;display:block}
+.fi{width:100%;background:var(–bg);border:1.5px solid var(–bd);border-radius:12px;
+padding:10px 12px;font-size:15px;font-family:inherit;color:var(–tx);outline:none;-webkit-appearance:none}
+.fi:focus{border-color:var(–sage)}
 .cpills-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -17px;padding:0 17px 4px}
 .cpills{display:flex;gap:6px;width:max-content}
 .cpill{padding:7px 13px;border-radius:18px;font-size:13px;font-weight:600;
-  border:1.5px solid var(--bd);background:transparent;cursor:pointer;
-  font-family:inherit;transition:all .15s;white-space:nowrap}
+border:1.5px solid var(–bd);background:transparent;cursor:pointer;
+font-family:inherit;transition:all .15s;white-space:nowrap}
 .cpill.sel{color:#fff;border-color:transparent}
-.amt-w{background:var(--bg);border:1.5px solid var(--bd);border-radius:14px;
-  padding:4px 14px;text-align:center;position:relative;margin-bottom:11px}
+.amt-w{background:var(–bg);border:1.5px solid var(–bd);border-radius:14px;
+padding:4px 14px;text-align:center;position:relative;margin-bottom:11px}
 .amt-sym{position:absolute;left:14px;top:50%;transform:translateY(-50%);
-  font-size:20px;color:var(--tx3);font-weight:700}
+font-size:20px;color:var(–tx3);font-weight:700}
 .amt-fi{font-size:26px;font-weight:700;text-align:center;border:none;background:transparent;
-  color:var(--tx);width:100%;outline:none;padding:7px 0}
+color:var(–tx);width:100%;outline:none;padding:7px 0}
 .tgl-row{display:flex;gap:7px}
-.tgl{flex:1;padding:10px 6px;border-radius:12px;border:2px solid var(--bd);background:transparent;
-  font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center}
-.tgl.c{border-color:var(--sage);background:#e8f2ec;color:var(--sage-dk)}
-.tgl.cc{border-color:var(--bl);background:var(--bl-bg);color:var(--bl)}
-.tgl.yes{border-color:var(--or);background:var(--or-bg);color:var(--or)}
-.adv-box{background:var(--or-bg);border:1.5px solid var(--or);border-radius:12px;
-  padding:11px 13px;margin-bottom:11px;display:none}
+.tgl{flex:1;padding:10px 6px;border-radius:12px;border:2px solid var(–bd);background:transparent;
+font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center}
+.tgl.c{border-color:var(–sage);background:#e8f2ec;color:var(–sage-dk)}
+.tgl.cc{border-color:var(–bl);background:var(–bl-bg);color:var(–bl)}
+.tgl.yes{border-color:var(–or);background:var(–or-bg);color:var(–or)}
+.adv-box{background:var(–or-bg);border:1.5px solid var(–or);border-radius:12px;
+padding:11px 13px;margin-bottom:11px;display:none}
 .adv-box.show{display:block}
 .adv-person-row{display:flex;align-items:center;gap:7px;background:#fff;border-radius:10px;
-  padding:7px 10px;margin-bottom:6px;border:1.5px solid var(--or)}
+padding:7px 10px;margin-bottom:6px;border:1.5px solid var(–or)}
 .adv-pn{font-size:13px;font-weight:700;flex:1}
 .adv-pi{width:90px;font-size:14px;font-weight:700;border:none;background:transparent;
-  text-align:right;color:var(--or);outline:none;font-family:inherit}
-.adv-prm{background:none;border:none;cursor:pointer;color:var(--tx3);font-size:16px;padding:2px 4px}
-.adv-qb{display:inline-block;background:#fff;border:1.5px dashed var(--or);border-radius:16px;
-  padding:3px 9px;font-size:11px;color:var(--or);cursor:pointer;
-  margin:3px 3px 0 0;font-family:inherit}
-.btn-sub{width:100%;background:var(--sage-dk);color:#fff;border:none;border-radius:14px;
-  padding:14px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:6px}
+text-align:right;color:var(–or);outline:none;font-family:inherit}
+.adv-prm{background:none;border:none;cursor:pointer;color:var(–tx3);font-size:16px;padding:2px 4px}
+.adv-qb{display:inline-block;background:#fff;border:1.5px dashed var(–or);border-radius:16px;
+padding:3px 9px;font-size:11px;color:var(–or);cursor:pointer;
+margin:3px 3px 0 0;font-family:inherit}
+.btn-sub{width:100%;background:var(–sage-dk);color:#fff;border:none;border-radius:14px;
+padding:14px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:6px}
 .btn-sub:active{opacity:.85}
 .btn-gr{background:#2d8a5a!important}
-.btn-or{background:var(--or)!important}
+.btn-or{background:var(–or)!important}
 
 /* ANALYSIS */
 .an-pg{flex:1;overflow-y:auto;padding:12px 12px 100px}
-.goal-card{background:linear-gradient(135deg,var(--sage-dk),var(--sage));border-radius:16px;
-  padding:16px 18px;color:#fff;margin-bottom:12px}
+.goal-card{background:linear-gradient(135deg,var(–sage-dk),var(–sage));border-radius:16px;
+padding:16px 18px;color:#fff;margin-bottom:12px}
 .gc-n{font-size:28px;font-weight:800;letter-spacing:-1px}
 .gc-bt{height:5px;background:rgba(255,255,255,.25);border-radius:3px;overflow:hidden;margin:8px 0 4px}
 .gc-bf{height:100%;background:rgba(255,255,255,.8);border-radius:3px;transition:width .8s}
 .gc-m{display:flex;justify-content:space-between;font-size:10px;opacity:.65}
-.li-row{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(--bd)}
+.li-row{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(–bd)}
 .li-row:last-child{border-bottom:none}
 .li-ic{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
-.li-bg{height:4px;background:var(--bd);border-radius:2px;overflow:hidden;margin-top:3px}
+.li-bg{height:4px;background:var(–bd);border-radius:2px;overflow:hidden;margin-top:3px}
 .li-bf{height:100%;border-radius:2px}
 .li-am{font-size:12px;font-weight:700;width:64px;text-align:right;flex-shrink:0}
 
 /* SETTINGS */
 .st-pg{flex:1;overflow-y:auto;padding:12px 12px 100px}
-.st-gl{font-size:10px;color:var(--tx2);font-weight:700;letter-spacing:.5px;padding:0 3px 5px}
-.st-sec{background:var(--card);border-radius:15px;overflow:hidden;margin-bottom:12px;
-  box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.st-gl{font-size:10px;color:var(–tx2);font-weight:700;letter-spacing:.5px;padding:0 3px 5px}
+.st-sec{background:var(–card);border-radius:15px;overflow:hidden;margin-bottom:12px;
+box-shadow:0 1px 4px rgba(0,0,0,.04)}
 .st-row{display:flex;align-items:center;gap:10px;padding:12px 13px;
-  border-bottom:1px solid var(--bd);cursor:pointer}
+border-bottom:1px solid var(–bd);cursor:pointer}
 .st-row:last-child{border-bottom:none}
 .st-ri{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;
-  justify-content:center;font-size:14px;flex-shrink:0}
+justify-content:center;font-size:14px;flex-shrink:0}
 .st-rt{flex:1}
 .st-tt{font-size:14px;font-weight:600}
-.st-sb{font-size:10px;color:var(--tx2);margin-top:1px}
-.st-ar{color:var(--tx3);font-size:16px;margin-left:auto}
+.st-sb{font-size:10px;color:var(–tx2);margin-top:1px}
+.st-ar{color:var(–tx3);font-size:16px;margin-left:auto}
 .mo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:0 17px 10px}
-.mo-opt{padding:12px;border-radius:10px;border:1.5px solid var(--bd);background:transparent;
-  font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;text-align:center}
-.mo-opt.sel{background:var(--sage-dk);color:#fff;border-color:var(--sage-dk)}
-.mo-opt.has{border-color:var(--sage-pl);color:var(--sage-dk)}
-.a-row{background:var(--card2);border:1.5px solid var(--bd);border-radius:12px;
-  padding:11px 14px;display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.a-lb{font-size:12px;font-weight:600;color:var(--tx2);flex:1}
-.a-sb{font-size:10px;color:var(--tx3)}
-.a-inp{font-size:17px;font-weight:700;color:var(--tx);background:transparent;border:none;
-  outline:none;width:130px;text-align:right;font-family:inherit}
+.mo-opt{padding:12px;border-radius:10px;border:1.5px solid var(–bd);background:transparent;
+font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;text-align:center}
+.mo-opt.sel{background:var(–sage-dk);color:#fff;border-color:var(–sage-dk)}
+.mo-opt.has{border-color:var(–sage-pl);color:var(–sage-dk)}
+.a-row{background:var(–card2);border:1.5px solid var(–bd);border-radius:12px;
+padding:11px 14px;display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.a-lb{font-size:12px;font-weight:600;color:var(–tx2);flex:1}
+.a-sb{font-size:10px;color:var(–tx3)}
+.a-inp{font-size:17px;font-weight:700;color:var(–tx);background:transparent;border:none;
+outline:none;width:130px;text-align:right;font-family:inherit}
 .cdot{width:28px;height:28px;border-radius:50%;cursor:pointer;border:3px solid transparent}
-.cdot.sel{border-color:var(--tx)}
+.cdot.sel{border-color:var(–tx)}
 
 ::-webkit-scrollbar{display:none}
 </style>
+
 </head>
 <body>
 
 <!-- ══ HOME ══ -->
+
 <div class="page active" id="pg-home">
   <div class="hdr" id="hdr-home">
     <div class="hdr-top">
@@ -416,116 +425,120 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
           font-family:inherit;cursor:pointer;padding:5px 0 1px;text-align:center"></button>
       </div>
 
-      <!-- 生活費 + 投資 -->
-      <div class="wrow">
-        <div class="wcard yw">
-          <div class="wlb">🛒 生活費餘額</div>
-          <div class="wvl" id="w-lv" style="color:#9a7010">$0</div>
-          <div class="wsb" style="font-size:9px">僅計「生活費」類別</div>
-          <div id="w-lv-bg" class="wbg ok">✓ 充裕</div>
-          <div style="margin-top:auto;padding-top:6px" class="mbar">
-            <div class="mbar-f" id="w-lv-bar" style="width:0%;background:var(--yw)"></div>
-          </div>
-        </div>
-        <div class="wcard">
-          <div class="wlb">📊 投資餘額</div>
-          <div class="wvl" id="w-iv" style="color:var(--sage-dk)">$0</div>
-          <div class="wsb">已投 <span id="w-iv-sp">$0</span></div>
-          <div style="margin-top:auto;padding-top:6px" class="mbar">
-            <div class="mbar-f" id="w-iv-bar" style="width:0%;background:var(--sage)"></div>
-          </div>
-        </div>
+```
+  <!-- 生活費 + 投資 -->
+  <div class="wrow">
+    <div class="wcard yw">
+      <div class="wlb">🛒 生活費餘額</div>
+      <div class="wvl" id="w-lv" style="color:#9a7010">$0</div>
+      <div class="wsb" style="font-size:9px">僅計「生活費」類別</div>
+      <div id="w-lv-bg" class="wbg ok">✓ 充裕</div>
+      <div style="margin-top:auto;padding-top:6px" class="mbar">
+        <div class="mbar-f" id="w-lv-bar" style="width:0%;background:var(--yw)"></div>
       </div>
-
-      <!-- 每日預算 -->
-      <div class="day-card">
-        <div class="day-inner">
-          <svg width="64" height="64" viewBox="0 0 64 64" style="flex-shrink:0">
-            <circle cx="32" cy="32" r="25" fill="none" stroke="var(--bd)" stroke-width="7"/>
-            <circle cx="32" cy="32" r="25" fill="none" stroke="var(--yw)" stroke-width="7"
-              stroke-dasharray="157.08" id="day-arc" stroke-dashoffset="157.08"
-              stroke-linecap="round" transform="rotate(-90 32 32)" style="transition:all .5s"/>
-            <text x="32" y="29" text-anchor="middle" font-size="9.5" font-weight="700" fill="#9a7010" id="day-n1">$0</text>
-            <text x="32" y="40" text-anchor="middle" font-size="7.5" fill="var(--tx3)">/天</text>
-          </svg>
-          <div class="day-info">
-            <div class="day-lbl">生活費每日剩餘預算</div>
-            <div class="day-br">
-              <div class="day-brl">已用</div>
-              <div class="day-bg"><div class="day-bf" id="day-used-f" style="width:0%;background:var(--yw)"></div></div>
-              <div class="day-bv" id="day-used-v">$0</div>
-            </div>
-            <div class="day-br">
-              <div class="day-brl">剩餘</div>
-              <div class="day-bg"><div class="day-bf" id="day-rem-f" style="width:100%;background:#b0e8c8"></div></div>
-              <div class="day-bv" id="day-rem-v">$0</div>
-            </div>
-            <div class="day-ft">本月剩 <strong id="day-days">30</strong> 天</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 付款追蹤 -->
-      <div class="pm-w">
-        <div class="pm-h">
-          <div class="wlb" style="margin:0">💳 付款方式（生活費）</div>
-          <span style="font-size:9px;color:var(--tx3)">預算 $<span id="pm-bgt-lbl">15,000</span></span>
-        </div>
-        <div class="pm-cols">
-          <div class="pm-col" id="pm-ca-col">
-            <div class="pm-cn">💵 現金</div>
-            <div class="pm-cv" id="pm-ca">$0</div>
-            <div class="pm-cs">本月花費</div>
-            <div class="pm-cb"><div class="pm-cf" id="pm-ca-bar" style="width:0%;background:var(--sage)"></div></div>
-          </div>
-          <div class="pm-col" id="pm-cc-col">
-            <div class="pm-cn">💳 信用卡</div>
-            <div class="pm-cv" id="pm-cc">$0</div>
-            <div class="pm-cs">本月刷卡</div>
-            <div class="pm-cb"><div class="pm-cf" id="pm-cc-bar" style="width:0%;background:var(--bl)"></div></div>
-          </div>
-          <div class="pm-col">
-            <div class="pm-cn">📊 合計</div>
-            <div class="pm-cv" id="pm-tot">$0</div>
-            <div class="pm-cs" id="pm-rem" style="color:var(--sage-dk)">剩 $0</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 投資配置 -->
-      <div class="iv-w">
-        <div class="iv-h">
-          <div class="wlb" style="margin:0">📈 投資配置</div>
-          <span id="alloc-lbl" style="font-size:10px;color:var(--sage-dk);font-weight:700">均衡 ✓</span>
-        </div>
-        <div class="rt-bar">
-          <div class="rt-ca" id="rt-ca" style="width:30%"></div>
-          <div class="rt-st" id="rt-st" style="width:70%"></div>
-        </div>
-        <div class="rt-lb">
-          <span style="color:#9a7010;font-weight:600">🏦 現金 <span id="rt-ca-p">30%</span></span>
-          <span style="color:var(--tx3)">目標 30:70</span>
-          <span style="color:var(--sage-dk);font-weight:600">📈 股票 <span id="rt-st-p">70%</span></span>
-        </div>
-        <div id="sr-list"></div>
-      </div>
-    </div><!-- .ca -->
-
-    <!-- 消費明細 -->
-    <div class="sec-h">
-      <div><div class="sec-t">消費明細</div><div class="sec-s" id="exp-sub">本月 $0</div></div>
-      <button class="btn-tx" onclick="showPage('pg-analysis')">分析 →</button>
     </div>
-    <div class="exp-sec" id="exp-container"></div>
-    <!-- FAB anchored inside scroll -->
-    <div class="fab-wrap">
-      <button class="fab" onclick="openAddExp()">＋ 記一筆</button>
+    <div class="wcard">
+      <div class="wlb">📊 投資餘額</div>
+      <div class="wvl" id="w-iv" style="color:var(--sage-dk)">$0</div>
+      <div class="wsb">已投 <span id="w-iv-sp">$0</span></div>
+      <div style="margin-top:auto;padding-top:6px" class="mbar">
+        <div class="mbar-f" id="w-iv-bar" style="width:0%;background:var(--sage)"></div>
+      </div>
     </div>
-    <div class="bot-sp"></div>
   </div>
+
+  <!-- 每日預算 -->
+  <div class="day-card">
+    <div class="day-inner">
+      <svg width="64" height="64" viewBox="0 0 64 64" style="flex-shrink:0">
+        <circle cx="32" cy="32" r="25" fill="none" stroke="var(--bd)" stroke-width="7"/>
+        <circle cx="32" cy="32" r="25" fill="none" stroke="var(--yw)" stroke-width="7"
+          stroke-dasharray="157.08" id="day-arc" stroke-dashoffset="157.08"
+          stroke-linecap="round" transform="rotate(-90 32 32)" style="transition:all .5s"/>
+        <text x="32" y="29" text-anchor="middle" font-size="9.5" font-weight="700" fill="#9a7010" id="day-n1">$0</text>
+        <text x="32" y="40" text-anchor="middle" font-size="7.5" fill="var(--tx3)">/天</text>
+      </svg>
+      <div class="day-info">
+        <div class="day-lbl">生活費每日剩餘預算</div>
+        <div class="day-br">
+          <div class="day-brl">已用</div>
+          <div class="day-bg"><div class="day-bf" id="day-used-f" style="width:0%;background:var(--yw)"></div></div>
+          <div class="day-bv" id="day-used-v">$0</div>
+        </div>
+        <div class="day-br">
+          <div class="day-brl">剩餘</div>
+          <div class="day-bg"><div class="day-bf" id="day-rem-f" style="width:100%;background:#b0e8c8"></div></div>
+          <div class="day-bv" id="day-rem-v">$0</div>
+        </div>
+        <div class="day-ft">本月剩 <strong id="day-days">30</strong> 天</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 付款追蹤 -->
+  <div class="pm-w">
+    <div class="pm-h">
+      <div class="wlb" style="margin:0">💳 付款方式（生活費）</div>
+      <span style="font-size:9px;color:var(--tx3)">預算 $<span id="pm-bgt-lbl">15,000</span></span>
+    </div>
+    <div class="pm-cols">
+      <div class="pm-col" id="pm-ca-col">
+        <div class="pm-cn">💵 現金</div>
+        <div class="pm-cv" id="pm-ca">$0</div>
+        <div class="pm-cs">本月花費</div>
+        <div class="pm-cb"><div class="pm-cf" id="pm-ca-bar" style="width:0%;background:var(--sage)"></div></div>
+      </div>
+      <div class="pm-col" id="pm-cc-col">
+        <div class="pm-cn">💳 信用卡</div>
+        <div class="pm-cv" id="pm-cc">$0</div>
+        <div class="pm-cs">本月刷卡</div>
+        <div class="pm-cb"><div class="pm-cf" id="pm-cc-bar" style="width:0%;background:var(--bl)"></div></div>
+      </div>
+      <div class="pm-col">
+        <div class="pm-cn">📊 合計</div>
+        <div class="pm-cv" id="pm-tot">$0</div>
+        <div class="pm-cs" id="pm-rem" style="color:var(--sage-dk)">剩 $0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 投資配置 -->
+  <div class="iv-w">
+    <div class="iv-h">
+      <div class="wlb" style="margin:0">📈 投資配置</div>
+      <span id="alloc-lbl" style="font-size:10px;color:var(--sage-dk);font-weight:700">均衡 ✓</span>
+    </div>
+    <div class="rt-bar">
+      <div class="rt-ca" id="rt-ca" style="width:30%"></div>
+      <div class="rt-st" id="rt-st" style="width:70%"></div>
+    </div>
+    <div class="rt-lb">
+      <span style="color:#9a7010;font-weight:600">🏦 現金 <span id="rt-ca-p">30%</span></span>
+      <span style="color:var(--tx3)">目標 30:70</span>
+      <span style="color:var(--sage-dk);font-weight:600">📈 股票 <span id="rt-st-p">70%</span></span>
+    </div>
+    <div id="sr-list"></div>
+  </div>
+</div><!-- .ca -->
+
+<!-- 消費明細 -->
+<div class="sec-h">
+  <div><div class="sec-t">消費明細</div><div class="sec-s" id="exp-sub">本月 $0</div></div>
+  <button class="btn-tx" onclick="showPage('pg-analysis')">分析 →</button>
+</div>
+<div class="exp-sec" id="exp-container"></div>
+<div class="bot-sp"></div>
+```
+
+  </div>
+</div>
+<!-- FAB — fixed, outside scroll -->
+<div class="fab-wrap">
+  <button class="fab" onclick="openAddExp()">＋ 記一筆</button>
 </div>
 
 <!-- ══ TODO PAGE ══ -->
+
 <div class="page" id="pg-todo">
   <div class="todo-hdr-mini">
     <div class="todo-title">
@@ -535,54 +548,58 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
   </div>
   <div class="todo-pg">
 
-    <!-- 代墊追討 -->
-    <div class="adv-sec">
-      <div class="adv-sec-hdr">
-        <div>
-          <div style="font-size:14px;font-weight:700">🤝 代墊追討</div>
-          <div style="font-size:10px;color:var(--tx3);margin-top:1px">記帳時勾選「我先墊」即自動記錄</div>
-        </div>
-        <span class="adv-tot-badge" id="adv-grand-badge" style="display:none"></span>
-      </div>
-      <div id="adv-list"></div>
+```
+<!-- 代墊追討 -->
+<div class="adv-sec">
+  <div class="adv-sec-hdr">
+    <div>
+      <div style="font-size:14px;font-weight:700">🤝 代墊追討</div>
+      <div style="font-size:10px;color:var(--tx3);margin-top:1px">記帳時勾選「我先墊」即自動記錄</div>
     </div>
+    <span class="adv-tot-badge" id="adv-grand-badge" style="display:none"></span>
+  </div>
+  <div id="adv-list"></div>
+</div>
 
-    <!-- 代墊收回紀錄 -->
-    <div class="adv-sec" id="settled-sec" style="display:none">
-      <button class="settled-toggle" onclick="toggleSettled()">
-        <span id="settled-toggle-lbl">▶ 已收回紀錄</span>
-      </button>
-      <div id="settled-list" style="display:none"></div>
+<!-- 代墊收回紀錄 -->
+<div class="adv-sec" id="settled-sec" style="display:none">
+  <button class="settled-toggle" onclick="toggleSettled()">
+    <span id="settled-toggle-lbl">▶ 已收回紀錄</span>
+  </button>
+  <div id="settled-list" style="display:none"></div>
+</div>
+
+<!-- 本月固定清單 -->
+<div class="ck-sec" style="margin-top:8px">
+  <div class="ck-sec-hdr">
+    <div>
+      <div style="font-size:14px;font-weight:700">📋 本月固定</div>
+      <div style="font-size:10px;color:var(--tx3);margin-top:1px" id="ck-fixed-prog">0/0 完成</div>
     </div>
+    <button class="btn-tx" onclick="openAddFixed()">＋ 新增</button>
+  </div>
+  <div id="ck-fixed-list"></div>
+</div>
 
-    <!-- 本月固定清單 -->
-    <div class="ck-sec" style="margin-top:8px">
-      <div class="ck-sec-hdr">
-        <div>
-          <div style="font-size:14px;font-weight:700">📋 本月固定</div>
-          <div style="font-size:10px;color:var(--tx3);margin-top:1px" id="ck-fixed-prog">0/0 完成</div>
-        </div>
-        <button class="btn-tx" onclick="openAddFixed()">＋ 新增</button>
-      </div>
-      <div id="ck-fixed-list"></div>
-    </div>
+<!-- 自訂待辦 -->
+<div class="ck-sec" style="margin-top:8px">
+  <div class="ck-sec-hdr">
+    <div style="font-size:14px;font-weight:700">✏️ 自訂待辦</div>
+    <button class="btn-tx" onclick="openAddTask()">＋</button>
+  </div>
+  <div id="ck-custom-list">
+    <div class="adv-empty">點右上「＋」新增自訂待辦</div>
+  </div>
+</div>
 
-    <!-- 自訂待辦 -->
-    <div class="ck-sec" style="margin-top:8px">
-      <div class="ck-sec-hdr">
-        <div style="font-size:14px;font-weight:700">✏️ 自訂待辦</div>
-        <button class="btn-tx" onclick="openAddTask()">＋</button>
-      </div>
-      <div id="ck-custom-list">
-        <div class="adv-empty">點右上「＋」新增自訂待辦</div>
-      </div>
-    </div>
+<div class="bot-sp"></div>
+```
 
-    <div class="bot-sp"></div>
   </div>
 </div>
 
 <!-- ══ ANALYSIS ══ -->
+
 <div class="page" id="pg-analysis">
   <div class="hdr hdr-sub" style="padding-bottom:12px">
     <div class="hdr-top" style="margin-bottom:0">
@@ -611,6 +628,7 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
 </div>
 
 <!-- ══ SETTINGS ══ -->
+
 <div class="page" id="pg-settings">
   <div class="hdr hdr-sub" style="padding-bottom:12px">
     <div class="hdr-top" style="margin-bottom:0"><div class="hdr-title">⚙️ 設定</div></div>
@@ -687,6 +705,7 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
 </div>
 
 <!-- NAV -->
+
 <div class="bot-nav">
   <button class="nav-it active" id="nav-home" onclick="showPage('pg-home')">
     <div class="nav-ic">💰</div><div class="nav-lb" style="color:var(--sage-dk)">記帳</div>
@@ -706,10 +725,10 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
   </button>
 </div>
 
-
 <!-- ══ SHEETS ══ -->
 
 <!-- ADD EXPENSE -->
+
 <div class="sh-ov" id="sh-exp">
   <div class="sheet" onclick="event.stopPropagation()">
     <div class="sh-hnd"></div>
@@ -723,10 +742,10 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
         <input class="fi" type="text" id="e-desc" placeholder="花了什麼？"></div>
       <div class="fg"><label class="flb">類別</label>
         <div class="cpills-wrap"><div class="cpills" id="e-pills"></div></div>
-        <!-- sub-category: shown only when 生活費 is selected -->
+        <!-- sub-category: shown for all categories -->
         <div id="e-sub-wrap" style="display:none;margin-top:8px">
           <div style="font-size:10px;color:var(--tx2);font-weight:600;margin-bottom:5px">
-            🛒 生活費子類別</div>
+            📂 細項分類（可選）</div>
           <div class="cpills-wrap"><div class="cpills" id="e-sub-pills"></div></div>
         </div>
         <div id="e-stk-wrap" style="display:none;margin-top:8px">
@@ -770,6 +789,7 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
 </div>
 
 <!-- ADD INCOME -->
+
 <div class="sh-ov" id="sh-income">
   <div class="sheet" onclick="event.stopPropagation()">
     <div class="sh-hnd"></div><div class="sh-ttl">記錄收入</div>
@@ -786,6 +806,7 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
 </div>
 
 <!-- ADD TASK -->
+
 <div class="sh-ov" id="sh-task">
   <div class="sheet" onclick="event.stopPropagation()">
     <div class="sh-hnd"></div><div class="sh-ttl">新增自訂待辦</div>
@@ -800,6 +821,7 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
 </div>
 
 <!-- EDIT FIXED -->
+
 <div class="sh-ov" id="sh-fixed">
   <div class="sheet" onclick="event.stopPropagation()">
     <div class="sh-hnd"></div>
@@ -823,6 +845,7 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
 </div>
 
 <!-- SETTLE CONFIRM -->
+
 <div class="sh-ov" id="sh-settle">
   <div class="sheet" onclick="event.stopPropagation()">
     <div class="sh-hnd"></div>
@@ -861,6 +884,7 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
 </div>
 
 <!-- BUDGET -->
+
 <div class="sh-ov" id="sh-budget">
   <div class="sheet" onclick="event.stopPropagation()">
     <div class="sh-hnd"></div><div class="sh-ttl">生活費月預算</div>
@@ -877,6 +901,7 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
 </div>
 
 <!-- ASSET -->
+
 <div class="sh-ov" id="sh-asset">
   <div class="sheet" onclick="event.stopPropagation()">
     <div class="sh-hnd"></div><div class="sh-ttl">更新資產</div>
@@ -907,13 +932,39 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
 </div>
 
 <!-- INVEST -->
+
 <div class="sh-ov" id="sh-invest">
   <div class="sheet" onclick="event.stopPropagation()">
     <div class="sh-hnd"></div><div class="sh-ttl">投資配置</div>
     <div class="sh-body">
+      <!-- 月投資預算 -->
+      <div class="fg" style="margin-bottom:14px">
+        <label class="flb">月投資預算</label>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span style="font-size:15px;color:var(--tx2)">$</span>
+          <input class="fi" type="number" id="iv-budget-inp" inputmode="decimal"
+            style="flex:1;font-size:18px;font-weight:700"
+            oninput="D.investBudget=parseInt(this.value)||0;save();renderHome()">
+        </div>
+      </div>
+      <div style="font-size:11px;font-weight:600;color:var(--tx3);margin-bottom:8px">投資標的配置</div>
       <div id="iv-edit-body"></div>
-      <div style="text-align:center;font-size:11px;color:var(--tx3);margin:7px 0 12px">
+      <div style="text-align:center;font-size:11px;color:var(--tx3);margin:4px 0 10px">
         合計 <span id="iv-tot-p" style="color:var(--sage-dk);font-weight:700">100%</span>
+      </div>
+      <!-- 新增標的 -->
+      <div id="iv-add-row" style="background:var(--card2);border-radius:12px;padding:10px 12px;margin-bottom:12px">
+        <div style="font-size:11px;font-weight:600;color:var(--tx2);margin-bottom:8px">＋ 新增標的</div>
+        <div style="display:flex;gap:6px;margin-bottom:6px">
+          <input class="fi" type="text" id="iv-new-code" placeholder="股票代號" style="flex:1;font-size:13px">
+          <input class="fi" type="text" id="iv-new-name" placeholder="名稱" style="flex:1;font-size:13px">
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <input class="fi" type="number" id="iv-new-pct" placeholder="佔比%" inputmode="decimal" style="width:80px;font-size:13px">
+          <span style="font-size:12px;color:var(--tx3)">%</span>
+          <button onclick="addStock()" style="margin-left:auto;background:var(--sage-dk);color:#fff;
+            border:none;border-radius:10px;padding:6px 14px;font-size:13px;font-weight:600;cursor:pointer">新增</button>
+        </div>
       </div>
       <button class="btn-sub" onclick="closeSheet('sh-invest');renderHome()">完成</button>
     </div>
@@ -921,6 +972,7 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
 </div>
 
 <!-- MONTH PICKER -->
+
 <div class="sh-ov" id="sh-mo">
   <div class="sheet" onclick="event.stopPropagation()">
     <div class="sh-hnd"></div><div class="sh-ttl">選擇月份</div>
@@ -929,6 +981,7 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
 </div>
 
 <!-- ADD CAT -->
+
 <div class="sh-ov" id="sh-cat">
   <div class="sheet" onclick="event.stopPropagation()">
     <div class="sh-hnd"></div><div class="sh-ttl">新增大類別</div>
@@ -964,6 +1017,7 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
 </div>
 
 <!-- CONFIRM MODAL -->
+
 <div class="cfm-ov" id="cfm-modal">
   <div class="cfm-box">
     <div class="cfm-ttl" id="cfm-ttl">確認</div>
@@ -984,6 +1038,7 @@ const GOAL=1000000, IV_BDG=20000;
 
 function defData(){return{
   livingBudget:15000,
+  investBudget:20000,
   stockValue:360000, bankValue:160000,
   // TOP-LEVEL categories (shown as main pills)
   cats:[
@@ -1030,6 +1085,7 @@ let D = JSON.parse(localStorage.getItem('fireV10')||localStorage.getItem('fireV8
 // migrate from older versions
 ['fixedDone','tasks','months','settled','cats','fixedTasks'].forEach(k=>{if(!D[k])D[k]=defData()[k]});
 if(!D.livingBudget)D.livingBudget=15000;
+if(!D.investBudget)D.investBudget=20000;
 if(!D.subCats)D.subCats=defData().subCats;
 // ensure new top-level cats exist
 defData().cats.forEach(dc=>{if(!D.cats.find(c=>c.name===dc.name))D.cats.push(dc)});
@@ -1488,21 +1544,42 @@ function renderExpList(exps){
       <div style="font-size:13px">本月尚無記帳<br>點右上「記一筆」開始</div></div>`;return;
   }
   const cm=cmap();
-  // group by day
+  // group by day — sort by time DESC within day
   const grp={};
-  exps.forEach((e,i)=>{
+  // sort all expenses by time DESC first
+  const sorted=[...exps].map((e,i)=>({...e,idx:i})).sort((a,b)=>b.time-a.time);
+  sorted.forEach(e=>{
     const d=new Date(e.time);
-    const dk=`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`; // sort key
-    const dl=`${d.getMonth()+1}月${d.getDate()}日 (${['日','一','二','三','四','五','六'][d.getDay()]})`; // display
+    const dk=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const dl=`${d.getMonth()+1}月${d.getDate()}日 (${['日','一','二','三','四','五','六'][d.getDay()]})`;
     if(!grp[dk])grp[dk]={label:dl,items:[]};
-    grp[dk].items.push({...e,idx:i});
+    grp[dk].items.push(e);
   });
   const now=new Date();
-  const todayKey=`${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
+  const todayKey=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
   const yest=new Date(now); yest.setDate(now.getDate()-1);
-  const yestKey=`${yest.getFullYear()}-${yest.getMonth()+1}-${yest.getDate()}`;
+  const yestKey=`${yest.getFullYear()}-${String(yest.getMonth()+1).padStart(2,'0')}-${String(yest.getDate()).padStart(2,'0')}`;
+  // Determine current week boundary (Mon of this week)
+  const dayOfWeek=now.getDay()||7; // 1=Mon..7=Sun
+  const weekStart=new Date(now); weekStart.setDate(now.getDate()-dayOfWeek+1); weekStart.setHours(0,0,0,0);
+  const weekStartKey=`${weekStart.getFullYear()}-${String(weekStart.getMonth()+1).padStart(2,'0')}-${String(weekStart.getDate()).padStart(2,'0')}`;
 
-  c.innerHTML=Object.keys(grp).sort().reverse().map(dk=>{
+  // Group days into weeks
+  const dayKeys=Object.keys(grp).sort().reverse();
+  // thisWeek: dk >= weekStartKey, pastWeeks: grouped by week
+  const thisWeekDays=dayKeys.filter(dk=>dk>=weekStartKey);
+  const pastDays=dayKeys.filter(dk=>dk<weekStartKey);
+  // Group past days into weeks (each group = Mon–Sun)
+  const weekGroups={}; // weekKey -> [dayKeys]
+  pastDays.forEach(dk=>{
+    const d=new Date(dk); const dow=d.getDay()||7;
+    const mon=new Date(d); mon.setDate(d.getDate()-dow+1);
+    const wk=`${mon.getFullYear()}-${String(mon.getMonth()+1).padStart(2,'0')}-${String(mon.getDate()).padStart(2,'0')}`;
+    if(!weekGroups[wk])weekGroups[wk]=[];
+    weekGroups[wk].push(dk);
+  });
+
+  function renderDayGroup(dk){
     const g=grp[dk];
     const lbl=dk===todayKey?'今天':dk===yestKey?'昨天':g.label;
     const dayTotal=g.items.reduce((s,e)=>s+e.amt,0);
@@ -1511,7 +1588,7 @@ function renderExpList(exps){
         <div class="exp-dt-lbl">${lbl}</div>
         <div class="exp-dt-amt">-${fmt(dayTotal)}</div>
       </div>`+
-      g.items.reverse().map(e=>{
+      g.items.map(e=>{
         const cat=cm[e.cat]||{icon:'💰',color:'#7a9e87'};
         const subC=e.subCat?cm[e.subCat]:null;
         const displayIcon=subC?subC.icon:cat.icon;
@@ -1531,7 +1608,36 @@ function renderExpList(exps){
           <button class="del-btn" onclick="delExp(event,${e.idx})">刪除</button>
         </div>`;
       }).join('')+'</div>';
-  }).join('');
+  }
+
+  let html=thisWeekDays.map(renderDayGroup).join('');
+
+  // Past weeks — collapsible
+  Object.keys(weekGroups).sort().reverse().forEach(wk=>{
+    const days=weekGroups[wk].sort().reverse();
+    const wTotal=days.reduce((s,dk)=>s+grp[dk].items.reduce((ss,e)=>ss+e.amt,0),0);
+    const d=new Date(wk);
+    const wEnd=new Date(d); wEnd.setDate(d.getDate()+6);
+    const wLabel=`${d.getMonth()+1}/${d.getDate()} – ${wEnd.getMonth()+1}/${wEnd.getDate()}`;
+    const wid='wk-'+wk.replace(/-/g,'');
+    html+=`<div class="week-collapse">
+      <div class="week-hdr" onclick="toggleWeek('${wid}')">
+        <span class="week-arr" id="arr-${wid}">▶</span>
+        <span>${wLabel}</span>
+        <span style="margin-left:auto;font-size:12px;font-weight:700;color:var(--rd)">-${fmt(wTotal)}</span>
+      </div>
+      <div class="week-body" id="${wid}" style="display:none">${days.map(renderDayGroup).join('')}</div>
+    </div>`;
+  });
+
+  c.innerHTML=html;
+}
+function toggleWeek(wid){
+  const body=document.getElementById(wid);
+  const arr=document.getElementById('arr-'+wid);
+  const open=body.style.display==='none';
+  body.style.display=open?'block':'none';
+  arr.classList.toggle('open',open);
 }
 function swItem(idx){
   if(swEl&&swEl!==`ei-${idx}`)document.getElementById(swEl)?.classList.remove('sw');
@@ -1546,8 +1652,8 @@ function delExp(e,idx){e.stopPropagation();curMD().expenses.splice(idx,1);save()
 //  ADD EXPENSE
 // ══════════════════════════════════════
 function openAddExp(){
-  selCat=D.cats[0]?.name;   // default to first top-level (生活費)
-  selSubCat=D.subCats[0]?.name; // default sub
+  selCat=D.cats[0]?.name;
+  selSubCat=null; // user picks sub if they want
   curPM='cash'; isAdv=false; advPersons=[];
   buildMainPills();
   buildSubPills();
@@ -1595,8 +1701,7 @@ function buildSubPills(){
 
 function pickCat(name){
   selCat=name;
-  // reset sub selection to first
-  if(name==='生活費')selSubCat=D.subCats[0]?.name;
+  selSubCat=null; // reset sub on cat change
   buildMainPills();
   updCatUI(name);
 }
@@ -1612,8 +1717,8 @@ function pickSubCat(name){
 }
 
 function updCatUI(cat){
-  // sub-category row
-  document.getElementById('e-sub-wrap').style.display=cat==='生活費'?'block':'none';
+  // sub-category: always show
+  document.getElementById('e-sub-wrap').style.display='block';
   // stock row
   const w=document.getElementById('e-stk-wrap');
   if(cat==='投資'){
@@ -1672,7 +1777,7 @@ function submitExp(){
   if(!amt||amt<=0){document.getElementById('e-amt').focus();return;}
   const desc=document.getElementById('e-desc').value.trim();
   const cat=selCat||D.cats[0]?.name;
-  const subCat=(cat==='生活費'&&selSubCat)?selSubCat:undefined;
+  const subCat=selSubCat||undefined;
   const stk=cat==='投資'?document.getElementById('e-stk').value:undefined;
   const rec={amt,desc:desc||cat,cat,subCat,pm:curPM,stockCode:stk,time:Date.now()};
   if(isAdv&&advPersons.length){
@@ -1836,6 +1941,12 @@ function saveAssets(){
   save();closeSheet('sh-asset');renderHome();renderSettings();
 }
 function openInvestEdit(){
+  document.getElementById('iv-budget-inp').value=D.investBudget||20000;
+  renderInvBody();
+  updTotPct();openSheet('sh-invest');
+}
+function renderInvBody(){
+  const STOCK_COLORS=['#4a9e65','#7a9e87','#e8c96a','#6b9fc9','#e07070','#c084fc','#f97316','#34d399','#b0c4de','#e08030'];
   document.getElementById('iv-edit-body').innerHTML=D.stocks.map((s,i)=>`
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
       <div style="width:10px;height:10px;border-radius:3px;background:${s.color};flex-shrink:0"></div>
@@ -1843,8 +1954,26 @@ function openInvestEdit(){
       <input type="number" value="${s.pct}" style="width:55px;font-size:16px;font-weight:700;text-align:right;
         border:1.5px solid var(--bd);border-radius:8px;padding:4px 7px;font-family:inherit"
         oninput="updIvPct(${i},this.value)"> %
+      <button onclick="removeStock(${i})" style="background:none;border:none;color:var(--rd);font-size:16px;cursor:pointer;padding:2px 4px">✕</button>
     </div>`).join('');
-  updTotPct();openSheet('sh-invest');
+}
+function addStock(){
+  const code=document.getElementById('iv-new-code').value.trim();
+  const name=document.getElementById('iv-new-name').value.trim();
+  const pct=parseInt(document.getElementById('iv-new-pct').value)||0;
+  if(!code||!name){alert('請填入股票代號和名稱');return;}
+  const COLORS=['#4a9e65','#7a9e87','#e8c96a','#6b9fc9','#e07070','#c084fc','#f97316','#34d399','#b0c4de','#e08030'];
+  const color=COLORS[D.stocks.length%COLORS.length];
+  D.stocks.push({code,name,pct,color});
+  save();
+  document.getElementById('iv-new-code').value='';
+  document.getElementById('iv-new-name').value='';
+  document.getElementById('iv-new-pct').value='';
+  renderInvBody();updTotPct();
+}
+function removeStock(i){
+  if(D.stocks.length<=1){alert('至少需要一個投資標的');return;}
+  D.stocks.splice(i,1);save();renderInvBody();updTotPct();
 }
 function updIvPct(i,v){D.stocks[i].pct=parseInt(v)||0;save();updTotPct()}
 function updTotPct(){document.getElementById('iv-tot-p').textContent=D.stocks.reduce((s,x)=>s+x.pct,0)+'%'}
@@ -1877,35 +2006,63 @@ function renderAnalysis(){
   document.getElementById('a-gb').style.width=pct+'%';
   document.getElementById('a-pct').textContent=pct.toFixed(1)+'%';
   document.getElementById('a-rem').textContent='還差 '+fmt(Math.max(GOAL-tot,0));
-  // Build chart data: for 生活費 expenses, group by subCat; others by cat
+  // Build chart data
   const grp={};
   exps.forEach(e=>{
-    if(e.cat==='生活費'&&e.subCat){
-      const key=`🛒 ${e.subCat}`;
-      grp[key]=(grp[key]||0)+e.amt;
-    }else{
-      grp[e.cat]=(grp[e.cat]||0)+e.amt;
-    }
+    const key=e.subCat?`${e.cat} · ${e.subCat}`:e.cat;
+    grp[key]=(grp[key]||0)+e.amt;
   });
   const totAmt=Object.values(grp).reduce((a,b)=>a+b,0);
   const cm=cmap();
+  // Distinct color palette for donut
+  const DONUT_COLORS=['#4a9e65','#6b9fc9','#e8c96a','#e07070','#c084fc','#f97316',
+    '#34d399','#fb7185','#38bdf8','#a3e635','#e08030','#7a9e87','#b0c4de','#fbbf24'];
+  const entries=Object.entries(grp).sort((a,b)=>b[1]-a[1]);
+  // Assign colors: use category color if available, else palette
+  const colorMap={};
+  let palIdx=0;
+  entries.forEach(([key])=>{
+    const baseCat=key.split(' · ')[0];
+    const subKey=key.includes(' · ')?key.split(' · ')[1]:null;
+    const catObj=subKey?(cm[subKey]||cm[baseCat]):cm[baseCat];
+    colorMap[key]=catObj?.color||DONUT_COLORS[palIdx++%DONUT_COLORS.length];
+  });
   const canvas=document.getElementById('donut');
   const ctx=canvas.getContext('2d');
-  const W=canvas.width,R=W/2,r1=R*.7,r2=R*.4;
+  const W=canvas.width,R=W/2,r1=R*.72,r2=R*.4;
   ctx.clearRect(0,0,W,W);
-  if(!totAmt){ctx.fillStyle='#e0ebe4';ctx.beginPath();ctx.arc(R,R,r1,0,Math.PI*2);ctx.arc(R,R,r2,0,Math.PI*2,true);ctx.fill();}
-  else{let a=-Math.PI/2;Object.entries(grp).forEach(([cat,val])=>{
-    const sw=val/totAmt*Math.PI*2;
-    ctx.beginPath();ctx.moveTo(R,R);ctx.arc(R,R,r1,a,a+sw);ctx.arc(R,R,r2,a+sw,a,true);ctx.closePath();
-    ctx.fillStyle=(cm[cat]||{color:'#aaa'}).color+'cc';ctx.fill();a+=sw;
-  });}
-  document.getElementById('donut-leg').innerHTML=Object.entries(grp).sort((a,b)=>b[1]-a[1]).map(([cat,val])=>{
-    const c=cm[cat]||{icon:'💰',color:'#aaa'};const p=totAmt?val/totAmt*100:0;
+  if(!totAmt){
+    ctx.fillStyle='#e0ebe4';ctx.beginPath();ctx.arc(R,R,r1,0,Math.PI*2);
+    ctx.arc(R,R,r2,0,Math.PI*2,true);ctx.fill();
+  }else{
+    let a=-Math.PI/2;
+    entries.forEach(([key,val])=>{
+      const sw=val/totAmt*Math.PI*2;
+      ctx.beginPath();ctx.moveTo(R,R);ctx.arc(R,R,r1,a,a+sw);
+      ctx.arc(R,R,r2,a+sw,a,true);ctx.closePath();
+      ctx.fillStyle=colorMap[key];ctx.fill();
+      // gap
+      ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+      a+=sw;
+    });
+  }
+  document.getElementById('donut-leg').innerHTML=entries.map(([key,val])=>{
+    const baseCat=key.split(' · ')[0];
+    const subKey=key.includes(' · ')?key.split(' · ')[1]:null;
+    const catObj=subKey?(cm[subKey]||cm[baseCat]):cm[baseCat];
+    const icon=catObj?.icon||'💰';
+    const color=colorMap[key];
+    const p=totAmt?val/totAmt*100:0;
     return`<div class="li-row">
-      <div class="li-ic" style="background:${c.color}22">${c.icon}</div>
-      <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600">${cat}</div>
-        <div class="li-bg"><div class="li-bf" style="width:${p}%;background:${c.color}"></div></div></div>
-      <div class="li-am">-${fmt(val)}</div></div>`;
+      <div class="li-ic" style="background:${color}22">${icon}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:600">${key}</div>
+        <div class="li-bg"><div class="li-bf" style="width:${p}%;background:${color}"></div></div>
+      </div>
+      <div style="text-align:right">
+        <div class="li-am">-${fmt(val)}</div>
+        <div style="font-size:10px;color:var(--tx3)">${p.toFixed(1)}%</div>
+      </div></div>`;
   }).join('');
   const yr=document.getElementById('year-list');
   const mths=Object.keys(D.months).filter(k=>k.startsWith(CY+'-')).sort().reverse();
@@ -2079,8 +2236,10 @@ renderHome();
   document.open();
   document.write('<pre style="font:14px/1.6 monospace;padding:20px;background:#1a1a2e;color:#e8c96a">'+
     JSON.stringify(data,null,2)+'</pre>');
-  document.close();
+
+document.close();
 })();
 </script>
+
 </body>
 </html>
