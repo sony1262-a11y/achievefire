@@ -62,14 +62,7 @@ color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer}
 .hdr-ico{width:32px;height:32px;background:rgba(255,255,255,.18);border:none;border-radius:50%;
 color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 /* FAB — sticky inside scroll, always floats at bottom-right */
-.fab{background:#5f8571;color:#fff;border:none;border-radius:28px;
-height:52px;padding:0 22px;font-size:15px;font-weight:700;font-family:inherit;
-cursor:pointer;align-items:center;gap:5px;
-box-shadow:0 4px 20px rgba(95,133,113,.45);
-position:fixed;bottom:calc(var(–nav-h) + 16px);right:16px;z-index:200;
-display:none}
-.fab.visible{display:flex}
-.fab:active{background:#4a6e5a;opacity:.9}
+
 /* Week collapse */
 .week-collapse{margin:0 12px 4px}
 .week-hdr{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(–card2);
@@ -230,8 +223,8 @@ box-shadow:0 1px 5px rgba(0,0,0,.05);overflow:hidden}
 .ck-sec-hdr{padding:12px 14px;border-bottom:1px solid var(–bd);display:flex;justify-content:space-between;align-items:center}
 .ck-it{display:flex;align-items:center;gap:9px;padding:11px 14px;border-bottom:1px solid var(–bd);cursor:pointer}
 .ck-it:last-child{border-bottom:none}
-.ck-box{width:22px;height:22px;border-radius:7px;border:2px solid var(–bd);
-display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.ck-box{width:22px;height:22px;border-radius:7px;border:2px solid #b0c8b8;
+display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;background:#fff}
 .ck-box.mn{background:var(–sage-dk);border-color:var(–sage-dk)}
 .ck-box.au{background:var(–bl);border-color:var(–bl)}
 .ck-lb{font-size:13px;font-weight:600;flex:1}
@@ -253,6 +246,15 @@ cursor:pointer;border:none;background:none;font-family:inherit}
 .nav-it.active .nav-lb{color:var(–sage-dk);font-weight:700}
 .n-dot{position:absolute;top:-3px;right:-5px;background:var(–rd);color:#fff;width:15px;height:15px;
 border-radius:50%;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center}
+/* FAB */
+.fab{background:#5f8571;color:#fff;border:none;border-radius:28px;
+height:52px;padding:0 22px;font-size:15px;font-weight:700;font-family:inherit;
+cursor:pointer;align-items:center;gap:5px;
+box-shadow:0 4px 20px rgba(95,133,113,.45);
+position:fixed;bottom:calc(var(–nav-h) + 16px);right:16px;z-index:150;
+display:none}
+.fab.visible{display:flex}
+.fab:active{background:#4a6e5a}
 
 /* SHEET */
 .sh-ov{position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:200;display:none;
