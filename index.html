@@ -15,7 +15,7 @@
 .is-pwa .hdr-sub    { padding-top: calc(env(safe-area-inset-top) + 8px) !important; }
 .is-pwa .bot-nav    { padding-bottom: calc(env(safe-area-inset-bottom) + 4px) !important; }
 .is-pwa .bot-sp     { height: calc(62px + env(safe-area-inset-bottom) + 20px) !important; }
-.is-pwa .fab        { bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 16px) !important; }
+.is-pwa .fab        { bottom: calc(62px + env(safe-area-inset-bottom) + 16px) !important; }
 </style>
 <script>
 if (window.navigator.standalone === true) {
@@ -62,14 +62,14 @@ color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer}
 .hdr-ico{width:32px;height:32px;background:rgba(255,255,255,.18);border:none;border-radius:50%;
 color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 /* FAB — sticky inside scroll, always floats at bottom-right */
-.fab{background:var(–sage-dk);color:#fff;border:none;border-radius:28px;
+.fab{background:#5f8571;color:#fff;border:none;border-radius:28px;
 height:52px;padding:0 22px;font-size:15px;font-weight:700;font-family:inherit;
 cursor:pointer;align-items:center;gap:5px;
 box-shadow:0 4px 20px rgba(95,133,113,.45);
 position:fixed;bottom:calc(var(–nav-h) + 16px);right:16px;z-index:200;
 display:none}
 .fab.visible{display:flex}
-.fab:active{opacity:.82}
+.fab:active{background:#4a6e5a;opacity:.9}
 /* Week collapse */
 .week-collapse{margin:0 12px 4px}
 .week-hdr{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(–card2);
