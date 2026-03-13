@@ -9,16 +9,10 @@
 <meta name="apple-mobile-web-app-title" content="投資金庫">
 <meta name="theme-color" content="#5f8571">
 <style>
-@supports (padding: env(safe-area-inset-top)) {
-  .hdr { padding-top: calc(env(safe-area-inset-top) + 8px) !important; }
-  .todo-hdr-mini { padding-top: calc(env(safe-area-inset-top) + 8px) !important; }
-  .hdr-sub { padding-top: calc(env(safe-area-inset-top) + 8px) !important; }
-  .bot-nav { padding-bottom: calc(env(safe-area-inset-bottom) + 4px) !important; }
-  .bot-sp { height: calc(62px + env(safe-area-inset-bottom) + 20px) !important; }
-}
+/* Safe area handled by JS below - only applies in PWA standalone mode */
 </style>
 <script>
-// Only apply safe area padding when launched as home screen app (standalone)
+// Only apply extra top padding when running as home screen PWA
 if (window.navigator.standalone === true) {
   document.documentElement.style.setProperty('--st', '70px');
   document.documentElement.style.setProperty('--sb', '34px');
@@ -50,7 +44,7 @@ body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);co
 
 /* HEADER */
 .hdr{background:linear-gradient(155deg,var(–sage-dk),var(–sage));
-padding-top:70px;padding-right:16px;padding-bottom:14px;padding-left:16px;
+padding-top:calc(var(–st) + 12px);padding-right:16px;padding-bottom:14px;padding-left:16px;
 flex-shrink:0;position:relative;overflow:hidden;z-index:10}
 .hdr::before{content:’’;position:absolute;top:-60px;right:-60px;width:200px;height:200px;
 background:rgba(255,255,255,.06);border-radius:50%}
