@@ -39,6 +39,7 @@ if (window.navigator.standalone === true) {
   --st:0px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+button{-webkit-appearance:none;appearance:none}
 html,body{height:100%;overflow:hidden;overscroll-behavior:none}
 body{font-family:-apple-system,'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
   max-width:430px;margin:0 auto;height:100vh;height:100dvh;display:flex;flex-direction:column}
@@ -269,11 +270,11 @@ box-shadow:0 8px 40px rgba(0,0,0,.18);animation:popIn .2s cubic-bezier(.34,1.56,
 .cfm-ttl{font-size:16px;font-weight:700;margin-bottom:7px}
 .cfm-msg{font-size:13px;color:var(–tx2);line-height:1.6;margin-bottom:16px}
 .cfm-btns{display:flex;gap:8px}
-.cfm-cancel{flex:1;padding:11px;border-radius:12px;border:1.5px solid var(–bd);
-background:var(–card2);font-size:14px;font-weight:700;font-family:inherit;cursor:pointer}
+.cfm-cancel{flex:1;padding:11px;border-radius:12px;border:1.5px solid #e0ebe4;
+background:#f7faf8;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer}
 .cfm-ok{flex:1;padding:11px;border-radius:12px;border:none;
-background:var(–rd);color:#fff;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer}
-.cfm-ok.safe{background:var(–sage-dk)}
+background:#e07070;color:#fff;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer}
+.cfm-ok.safe{background:#5f8571}
 .sh-ov.open{display:flex}
 .sheet{background:#fff;border-radius:24px 24px 0 0;padding:0 0 calc(22px + var(–sb));
 width:100%;max-height:92vh;overflow-y:auto;
@@ -317,11 +318,12 @@ text-align:right;color:var(–or);outline:none;font-family:inherit}
 .adv-qb{display:inline-block;background:#fff;border:1.5px dashed var(–or);border-radius:16px;
 padding:3px 9px;font-size:11px;color:var(–or);cursor:pointer;
 margin:3px 3px 0 0;font-family:inherit}
-.btn-sub{width:100%;background:var(–sage-dk);color:#fff;border:none;border-radius:14px;
-padding:14px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:6px}
+.btn-sub{width:100%;background:#5f8571;color:#fff;border:none;border-radius:14px;
+padding:14px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:6px;
+-webkit-appearance:none;appearance:none}
 .btn-sub:active{opacity:.85}
 .btn-gr{background:#2d8a5a!important}
-.btn-or{background:var(–or)!important}
+.btn-or{background:#e08030!important}
 
 /* ANALYSIS */
 .an-pg{flex:1;overflow-y:auto;padding:12px 12px 20px;overscroll-behavior-y:contain}
