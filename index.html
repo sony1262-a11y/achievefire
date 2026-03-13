@@ -579,10 +579,16 @@ outline:none;width:130px;text-align:right;font-family:inherit}
     </div>
     <div class="st-gl">預算</div>
     <div class="st-sec">
-      <div class="st-row" onclick="openBudgetEdit()">
+      <div class="st-row" onclick="openBudgetEdit('living')">
         <div class="st-ri" style="background:var(--yw-bg)">🛒</div>
         <div class="st-rt"><div class="st-tt">生活費月預算</div>
           <div class="st-sb" id="st-bgt-sb">$15,000 / 月</div></div>
+        <div class="st-ar">›</div>
+      </div>
+      <div class="st-row" onclick="openBudgetEdit('fixed')">
+        <div class="st-ri" style="background:#eef5fb">🏠</div>
+        <div class="st-rt"><div class="st-tt">固定開銷月預算</div>
+          <div class="st-sb" id="st-fixed-bgt-sb">$25,000 / 月</div></div>
         <div class="st-ar">›</div>
       </div>
     </div>
@@ -855,13 +861,13 @@ outline:none;width:130px;text-align:right;font-family:inherit}
 
 <div class="sh-ov" id="sh-budget">
   <div class="sheet" onclick="event.stopPropagation()">
-    <div class="sh-hnd"></div><div class="sh-ttl">生活費月預算</div>
+    <div class="sh-hnd"></div><div class="sh-ttl" id="sh-budget-ttl">生活費月預算</div>
     <div class="sh-body">
       <div class="amt-w">
         <span class="amt-sym">$</span>
         <input class="amt-fi" type="number" id="budget-inp" inputmode="decimal">
       </div>
-      <div style="font-size:11px;color:var(--tx3);text-align:center;margin-bottom:14px">
+      <div style="font-size:11px;color:var(--tx3);text-align:center;margin-bottom:14px" id="sh-budget-hint">
         僅「生活費」類別計入此預算</div>
       <button class="btn-sub" onclick="saveBudget()">儲存</button>
     </div>
@@ -1007,6 +1013,7 @@ const GOAL=1000000;
 function defData(){return{
   livingBudget:15000,
   investBudget:20000,
+  fixedBudget:25000,
   stockValue:360000, bankValue:160000,
   // TOP-LEVEL categories (shown as main pills)
   cats:[
@@ -1060,6 +1067,7 @@ try {
 ['fixedDone','tasks','months','settled','cats','fixedTasks'].forEach(k=>{if(!D[k])D[k]=defData()[k]});
 if(!D.livingBudget)D.livingBudget=15000;
 if(!D.investBudget)D.investBudget=20000;
+if(!D.fixedBudget)D.fixedBudget=25000;
 if(!D.subCats)D.subCats=defData().subCats;
 // ensure new top-level cats exist
 defData().cats.forEach(dc=>{if(!D.cats.find(c=>c.name===dc.name))D.cats.push(dc)});
@@ -1161,15 +1169,14 @@ function renderHome(){
   const livSpent=exps.filter(e=>e.cat==='生活費').reduce((s,e)=>s+e.amt,0);
   const invSpent=exps.filter(e=>e.cat==='投資').reduce((s,e)=>s+e.amt,0);
   const fixedCats=new Set(D.fixedTasks.map(t=>t.cat).filter(Boolean));
-  const fixedBgt=D.fixedTasks.reduce((s,t)=>s+(t.amt||0),0);
   const fixedSpent=exps.filter(e=>fixedCats.has(e.cat)).reduce((s,e)=>s+e.amt,0);
-  const extraBgt=totInc>0?Math.max(totInc-D.livingBudget-D.investBudget-fixedBgt,0):0;
+  const extraBgt=totInc>0?Math.max(totInc-D.livingBudget-D.investBudget-D.fixedBudget,0):0;
   const extraSpent=Math.max(totExp-livSpent-invSpent-fixedSpent,0);
   const allocDefs=[
     {lbl:'生活費',icon:'🛒',color:'#c4a020',bg:'#fffbee',bgt:D.livingBudget,spent:livSpent,
       sub:()=>{const d=daysLeft>0?Math.max((D.livingBudget-livSpent)/daysLeft,0):0;
         return`每天剩 ${d>=10000?'$'+Math.round(d/1000)+'k':fmt(Math.floor(d))}`}},
-    {lbl:'固定開銷',icon:'🏠',color:'#4a7fa8',bg:'#eef5fb',bgt:fixedBgt,spent:fixedSpent,
+    {lbl:'固定開銷',icon:'🏠',color:'#4a7fa8',bg:'#eef5fb',bgt:D.fixedBudget,spent:fixedSpent,
       sub:()=>`共 ${D.fixedTasks.length} 項固定`},
     {lbl:'投資',icon:'📈',color:'#4a7a60',bg:'#eef5f0',bgt:D.investBudget,spent:invSpent,
       sub:()=>`已投 ${fmt(invSpent)}`},
@@ -1958,8 +1965,26 @@ function delFixed(i){
 // ══════════════════════════════════════
 //  BUDGET / ASSETS / INVEST
 // ══════════════════════════════════════
-function openBudgetEdit(){document.getElementById('budget-inp').value=D.livingBudget;openSheet('sh-budget')}
-function saveBudget(){const v=parseInt(document.getElementById('budget-inp').value);if(v>0){D.livingBudget=v;save();}closeSheet('sh-budget');renderHome();renderSettings();}
+let curBudgetType='living';
+function openBudgetEdit(type='living'){
+  curBudgetType=type;
+  const isFixed=type==='fixed';
+  document.getElementById('sh-budget-ttl').textContent=isFixed?'固定開銷月預算':'生活費月預算';
+  document.getElementById('sh-budget-hint').textContent=isFixed?'房貸、管理費等固定支出的預估預算':'僅「生活費」類別計入此預算';
+  document.getElementById('budget-inp').value=isFixed?(D.fixedBudget||25000):D.livingBudget;
+  openSheet('sh-budget');
+}
+function saveBudget(){
+  const v=parseInt(document.getElementById('budget-inp').value);
+  if(v>0){
+    if(curBudgetType==='fixed') D.fixedBudget=v;
+    else D.livingBudget=v;
+    save();
+  }
+  closeSheet('sh-budget');
+  renderHome();
+  renderSettings();
+}
 function openAssetEdit(){
   document.getElementById('a-stk').value=D.stockValue;
   document.getElementById('a-bank').value=D.bankValue;
@@ -2142,6 +2167,7 @@ function renderAnalysis(){
 function renderSettings(){
   document.getElementById('st-asset-sb').textContent=`股票 ${fmt(D.stockValue)} ｜現金 ${fmt(D.bankValue)}`;
   document.getElementById('st-bgt-sb').textContent=fmt(D.livingBudget)+' / 月';
+  document.getElementById('st-fixed-bgt-sb').textContent=fmt(D.fixedBudget||25000)+' / 月';
   document.getElementById('st-fixed-sec').innerHTML=D.fixedTasks.map((t,i)=>
     `<div class="st-row">
       <div class="st-ri" style="background:var(--card2)">${t.icon}</div>
