@@ -251,6 +251,20 @@ display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:
 .ck-amt{font-size:12px;font-weight:700;color:var(–tx2);flex-shrink:0}
 .ck-ed{font-size:12px;color:var(–tx3);background:none;border:none;cursor:pointer;padding:2px 6px}
 .ck-done-foot{padding:10px 14px;text-align:center;font-size:12px;color:#3d9058;font-weight:700}
+/* habit tracker */
+.habit-it{border-bottom:1px solid var(–bd)}
+.habit-it:last-child{border-bottom:none}
+.habit-row{display:flex;align-items:center;gap:9px;padding:11px 14px;cursor:pointer}
+.habit-streak{font-size:10px;color:#e08030;font-weight:700;flex-shrink:0}
+.habit-cal{padding:8px 14px 12px;background:#fafcfb}
+.habit-cal-title{font-size:10px;color:var(–tx3);font-weight:700;margin-bottom:6px}
+.habit-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.habit-day{width:100%;aspect-ratio:1;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700}
+.habit-day.done{background:#5f8571;color:#fff}
+.habit-day.today{outline:2px solid #5f8571;outline-offset:1px}
+.habit-day.empty{background:transparent}
+.habit-day.fill{background:#e0ebe4;color:var(–tx3)}
+.habit-wlbl{font-size:8px;color:var(–tx3);text-align:center;padding:1px 0;font-weight:600}
 
 /* NAV */
 .bot-nav{background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-top:1px solid var(–bd);
@@ -522,6 +536,8 @@ outline:none;width:130px;text-align:right;font-family:inherit}
   <div id="ck-custom-list">
     <div class="adv-empty">點右上「＋」新增自訂待辦</div>
   </div>
+  <!-- shared habit calendar -->
+  <div id="habit-cal-section" style="display:none;border-top:1px solid var(--bd)"></div>
 </div>
 
 <div class="bot-sp"></div>
@@ -789,8 +805,14 @@ outline:none;width:130px;text-align:right;font-family:inherit}
     <div class="sh-hnd"></div><div class="sh-ttl">新增自訂待辦</div>
     <div class="sh-body">
       <div class="fg"><label class="flb">項目名稱</label>
-        <input class="fi" type="text" id="task-nm" placeholder="例：繳信用卡"></div>
-      <div class="fg"><label class="flb">金額（選填）</label>
+        <input class="fi" type="text" id="task-nm" placeholder="例：繳信用卡、喝水500ml"></div>
+      <div class="fg"><label class="flb">類型</label>
+        <div class="tgl-row">
+          <button class="tgl c" id="task-type-once" onclick="setTaskType('once')">📋 一次性待辦</button>
+          <button class="tgl" id="task-type-habit" onclick="setTaskType('habit')">🔥 每日習慣</button>
+        </div>
+      </div>
+      <div class="fg" id="task-amt-wrap"><label class="flb">金額（選填）</label>
         <input class="fi" type="number" id="task-amt" placeholder="0" inputmode="decimal"></div>
       <button class="btn-sub" onclick="submitTask()">新增</button>
     </div>
@@ -1439,22 +1461,146 @@ function toggleFixed(id){
 }
 
 // ── CUSTOM TASKS ──
+function todayKey(){const n=new Date();return`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`}
+
 function renderCustomTasks(){
   const CHK=`<svg width="11" height="11" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg>`;
   const el=document.getElementById('ck-custom-list');
-  if(!D.tasks.length){
-    el.innerHTML='<div class="adv-empty">點右上「＋」新增自訂待辦</div>';return;
+  const habits=D.tasks.filter(t=>t.type==='habit');
+  const once=D.tasks.filter(t=>t.type!=='habit');
+  const tk=todayKey();
+
+  if(!D.tasks.length){el.innerHTML='<div class="adv-empty">點右上「＋」新增自訂待辦</div>';}
+  else {
+    let html='';
+    habits.forEach(t=>{
+      const i=D.tasks.indexOf(t);
+      const doneToday=(t.logs||[]).includes(tk);
+      const streak=calcStreak(t.logs||[]);
+      const boxBg=doneToday?'#5f8571':'#fff';
+      const boxBd=doneToday?'#5f8571':'#b0c8b8';
+      html+=`<div class="ck-it">
+        <div class="ck-box" style="background:${boxBg};border-color:${boxBd};cursor:pointer" onclick="toggleHabit(${i})">${doneToday?CHK:''}</div>
+        <div class="ck-lb" style="${doneToday?'opacity:.55':''}">${t.name}</div>
+        ${streak>0?`<span class="habit-streak">🔥${streak}</span>`:''}
+        <button class="ck-ed" onclick="delTask(event,${i})">✕</button>
+      </div>`;
+    });
+    once.forEach(t=>{
+      const i=D.tasks.indexOf(t);
+      const done=t.done;
+      const boxBg=done?'#5f8571':'#fff';
+      const boxBd=done?'#5f8571':'#b0c8b8';
+      html+=`<div class="ck-it" onclick="toggleTask(${i})">
+        <div class="ck-box" style="background:${boxBg};border-color:${boxBd}">${done?CHK:''}</div>
+        <div class="ck-lb${done?' dn':''}">${t.name}</div>
+        ${t.amt?`<div class="ck-amt">${fmt(parseInt(t.amt))}</div>`:''}
+        <button class="ck-ed" onclick="delTask(event,${i})">✕</button>
+      </div>`;
+    });
+    el.innerHTML=html;
   }
-  el.innerHTML=D.tasks.map((t,i)=>{
-    const boxBg=t.done?'#5f8571':'#fff';
-    const boxBd=t.done?'#5f8571':'#b0c8b8';
-    return`<div class="ck-it" onclick="toggleTask(${i})">
-      <div class="ck-box" style="background:${boxBg};border-color:${boxBd}">${t.done?CHK:''}</div>
-      <div class="ck-lb${t.done?' dn':''}">${t.name}</div>
-      ${t.amt?`<div class="ck-amt">${fmt(parseInt(t.amt))}</div>`:''}
-      <button class="ck-ed" onclick="delTask(event,${i})">✕</button>
-    </div>`;}).join('');
+
+  // shared habit calendar at bottom
+  const calSec=document.getElementById('habit-cal-section');
+  if(habits.length>0){
+    calSec.style.display='block';
+    calSec.innerHTML=renderHabitCal();
+  } else {
+    calSec.style.display='none';
+  }
 }
+
+function calcStreak(logs){
+  if(!logs.length)return 0;
+  const sorted=[...logs].sort().reverse();
+  const n=new Date(); let streak=0;
+  for(let d=0;d<90;d++){
+    const k=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`;
+    if(sorted.includes(k)){streak++;}
+    else if(d>0)break; // allow today to be not done yet
+    n.setDate(n.getDate()-1);
+  }
+  return streak;
+}
+
+function renderHabitCal(t,i){
+  // shared calendar: shows ALL habits' logs, one calendar for all
+  const habits=D.tasks.filter(t=>t.type==='habit');
+  const now=new Date();
+  const y=now.getFullYear(), m=now.getMonth();
+  const daysInMonth=new Date(y,m+1,0).getDate();
+  const firstDay=new Date(y,m,1).getDay()||7; // 1=Mon
+  const tk=todayKey();
+  const mLabel=`${m+1}月 ${y}`;
+  const wdays=['一','二','三','四','五','六','日'];
+
+  // build per-day habit list
+  function getDayHabits(dk){
+    return habits.filter(h=>(h.logs||[]).includes(dk));
+  }
+
+  let header=wdays.map(w=>`<div class="habit-wlbl">${w}</div>`).join('');
+  let cells='';
+  for(let p=1;p<firstDay;p++) cells+=`<div class="habit-day empty"></div>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const dk=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const done=getDayHabits(dk);
+    const isPast=d<now.getDate(), isToday=dk===tk, isFuture=d>now.getDate();
+    const pct=habits.length>0?done.length/habits.length:0;
+    // color intensity based on completion ratio
+    const bg=done.length===0?(isFuture?'transparent':'#e8eeea'):
+              pct>=1?'#3d6b58':pct>=0.5?'#5f8571':'#a0c4aa';
+    const fg=done.length>0?'#fff':'#aaa';
+    cells+=`<div class="habit-day${isToday?' today':''}" 
+      style="background:${bg};color:${fg};cursor:${done.length>0||isToday?'pointer':'default'}"
+      onclick="showDayDetail('${dk}')">${d}</div>`;
+  }
+
+  // day detail section (shown if a day is selected)
+  const selDk=D._habitCalSel;
+  let detailHtml='';
+  if(selDk){
+    const selDate=new Date(selDk+'T00:00:00');
+    const selLabel=`${selDate.getMonth()+1}/${selDate.getDate()} (${['日','一','二','三','四','五','六'][selDate.getDay()]})`;
+    const doneH=getDayHabits(selDk);
+    const notDoneH=habits.filter(h=>!doneH.includes(h));
+    detailHtml=`<div style="margin-top:10px;padding-top:8px;border-top:1px solid #dde8e2">
+      <div style="font-size:10px;font-weight:700;color:var(--tx2);margin-bottom:6px">${selLabel}</div>
+      ${doneH.map(h=>`<div style="display:flex;align-items:center;gap:6px;padding:3px 0;font-size:12px">
+        <div style="width:14px;height:14px;border-radius:4px;background:#5f8571;display:flex;align-items:center;justify-content:center">
+          <svg width="8" height="8" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+        </div>
+        <span style="color:#2d3d32;font-weight:600">${h.name}</span>
+      </div>`).join('')}
+      ${notDoneH.map(h=>`<div style="display:flex;align-items:center;gap:6px;padding:3px 0;font-size:12px">
+        <div style="width:14px;height:14px;border-radius:4px;background:#e8eeea;border:1.5px solid #b0c8b8"></div>
+        <span style="color:#aaa">${h.name}</span>
+      </div>`).join('')}
+    </div>`;
+  }
+
+  return`<div class="habit-cal">
+    <div class="habit-cal-title">${mLabel} ・ 點擊日期查看明細</div>
+    <div class="habit-grid">${header}${cells}</div>
+    ${detailHtml}
+  </div>`;
+}
+
+function showDayDetail(dk){
+  D._habitCalSel = D._habitCalSel===dk ? null : dk;
+  renderCustomTasks();
+}
+
+function toggleHabit(i){
+  const t=D.tasks[i]; if(t.type!=='habit')return;
+  if(!t.logs)t.logs=[];
+  const tk=todayKey();
+  const idx=t.logs.indexOf(tk);
+  if(idx>=0) t.logs.splice(idx,1); else t.logs.push(tk);
+  save();renderCustomTasks();
+}
+
 function toggleTask(i){D.tasks[i].done=!D.tasks[i].done;save();renderCustomTasks()}
 function delTask(e,i){e.stopPropagation();D.tasks.splice(i,1);save();renderCustomTasks()}
 
@@ -1897,14 +2043,26 @@ function delIncome(i){
 // ══════════════════════════════════════
 //  TASKS
 // ══════════════════════════════════════
+let newTaskType='once';
+function setTaskType(type){
+  newTaskType=type;
+  document.getElementById('task-type-once').className='tgl'+(type==='once'?' c':'');
+  document.getElementById('task-type-habit').className='tgl'+(type==='habit'?' c':'');
+  document.getElementById('task-amt-wrap').style.display=type==='habit'?'none':'block';
+}
 function openAddTask(){
   document.getElementById('task-nm').value='';document.getElementById('task-amt').value='';
+  setTaskType('once');
   openSheet('sh-task');setTimeout(()=>document.getElementById('task-nm').focus(),350);
 }
 function submitTask(){
   const nm=document.getElementById('task-nm').value.trim();if(!nm)return;
   const amt=document.getElementById('task-amt').value;
-  D.tasks.push({id:'t'+Date.now(),name:nm,amt:amt||0,done:false});
+  if(newTaskType==='habit'){
+    D.tasks.push({id:'t'+Date.now(),name:nm,type:'habit',logs:[]});
+  } else {
+    D.tasks.push({id:'t'+Date.now(),name:nm,type:'once',amt:amt||0,done:false});
+  }
   save();closeSheet('sh-task');renderCustomTasks();
 }
 
